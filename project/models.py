@@ -2,9 +2,6 @@ from django.db import models
 from django.utils import timezone
 # Create your models here.
 
-def get_current_date():
-    return timezone.now().date()
-
 
 # *************************** Category ******************************
 class Category(models.Model):
@@ -28,7 +25,7 @@ class Project(models.Model):
     details = models.TextField()
     rate = models.FloatField()
     total_target = models.FloatField()
-    start_time = models.DateField(default=get_current_date)
+    start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     current_donation = models.IntegerField()
@@ -36,7 +33,7 @@ class Project(models.Model):
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="projects")
     # owner = models.ForeignKey(, on_delete=models.CASCADE)
-    tag = models.ManyToManyField(Tag ,blank=True, related_name="projects")
+    tag = models.ManyToManyField(Tag,null=True, blank=True, related_name="projects")
 
     def __str__(self):
         return self.title
@@ -51,7 +48,7 @@ class Picture(models.Model):
         return f"/media/{self.image}"
     
 
-# **************************  Donation  ***********************
+# ************************** Donation  ***********************
 class Donation(models.Model):
     donation = models.FloatField()
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='donations')
