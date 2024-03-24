@@ -24,16 +24,15 @@ class Tag(models.Model):
     
 # ************************** Project **********************************
 class Project(models.Model):
-    title = models.CharField(max_length=250)
+    title = models.CharField(max_length=250,unique=True)
     details = models.TextField()
     rate = models.FloatField()
     total_target = models.FloatField()
-    start_time = models.DateField(default=get_current_date)
-    end_time = models.DateField()
+    start_date = models.DateField(default=get_current_date)
+    end_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     current_donation = models.IntegerField()
     is_featured = models.BooleanField(default=False)
-
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="projects")
     # owner = models.ForeignKey(, on_delete=models.CASCADE)
     tag = models.ManyToManyField(Tag ,blank=True, related_name="projects")
