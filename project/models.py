@@ -6,6 +6,8 @@ def get_current_date():
     return timezone.now().date()
 
 
+
+
 # *************************** Category ******************************
 class Category(models.Model):
     name = models.CharField(max_length=250, unique=True)
