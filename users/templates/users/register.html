@@ -70,6 +70,12 @@
             box-shadow: none !important;
             outline: 0px !important;
         }
+        .messages{
+			background-color: grey;
+			color: #fff;
+			padding: 10px;
+			margin-top: 10px;
+		}
     </style>
 
 </head>
@@ -140,6 +146,9 @@
                         </div>
                     </form>
                 </div>
+                {% for message in messages %}
+                        <p class="messages">{{message}}</p>
+                    {% endfor %}
                 <div class="mt-4">
                     <div class="d-flex justify-content-center links">
                         Already have an account? <a href="{% url 'login' %}" class="ml-2">Login</a>
