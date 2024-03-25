@@ -9,7 +9,7 @@ class Project_ModelForm(forms.ModelForm):
     )
     
     details = forms.CharField( 
-        widget=forms.Textarea(attrs={"placeholder": "Details", "class": "form-control"})
+        widget=forms.Textarea(attrs={"placeholder": "Details", "class": "form-control"}),
     )
     
     total_target = forms.FloatField(
@@ -18,7 +18,8 @@ class Project_ModelForm(forms.ModelForm):
 
     start_date = forms.DateField(
         widget=NumberInput(attrs={"placeholder": "Start Date", "type": "date", "class": "form-control"}),
-        required=False
+        required=False,
+        initial=datetime.now().date()
     )
     end_date = forms.DateField(
         widget=forms.NumberInput(attrs={"placeholder": "End Date", "type": "date", "class": "form-control"})
@@ -53,13 +54,13 @@ class Project_ModelForm(forms.ModelForm):
             raise forms.ValidationError("Total Target must be a positive number.")
         return total_target
     
-    def clean_tag(self):
-        tags = self.cleaned_data.get('tag')
-        if tags:
-            for tag in tags:
-                if not tag.name.isalnum():
-                    raise forms.ValidationError("Tags should only contain letters or numbers.")
-        return tags
+    # def clean_tag(self):
+    #     tags = self.cleaned_data.get('tag')
+    #     if tags:
+    #         for tag in tags:
+    #             if not tag.name.isalnum():
+    #                 raise forms.ValidationError("Tags should only contain letters or numbers.")
+    #     return tags
     
 
     def clean(self):
@@ -68,7 +69,7 @@ class Project_ModelForm(forms.ModelForm):
         end_date = cleaned_data.get("end_date")
         today_date = datetime.now().date()
   
-        if today_date > start_date:
+        if (start_date) and today_date > start_date:
             self._errors["start_date"] = self.error_class(["Start date should be greater than Today date"])
 
         if today_date > end_date:

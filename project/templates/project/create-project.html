@@ -60,7 +60,7 @@
 <body>
   <div class="container">
     <div class="form-container">
-      <form method="post" autocomplete="off" enctype="multipart/form-data">
+      <form id="projectForm" method="post" autocomplete="off" enctype="multipart/form-data" >
         {% csrf_token %}
 
         <h2 class="mb-3 text-center">Create Project</h2>
@@ -102,18 +102,23 @@
 
         <div class="form-group mb-3">
           <label for="id_newTag" class="form-label">Add Tag</label>
-          <input type="text" class="form-control" id="id_newTag" name="newTag" maxlength="12" >
-          <span class="error-message">{{ form.tag.errors }}</span>
+          <input type="text" class="form-control" id="id_newTag" name="newTag" maxlength="255" placeholder="Enter tags separated by commas">          <span class="error-message">{{ form.tag.errors }}</span>
+          <span class="error-message" id="newTagError"></span>
         </div>
 
-        <div class="text-center">
-          <p style="color: #351507; font-size: large;">Or choose From:</p>
-          {{ form.tag }}
+        <div class="form-group mb-3">
+          <label for="id_tag" class="form-label">Tags</label>
+          <select name="tag" id="id_tag" class="form-control" multiple>
+            {% for tag in form.tag.field.queryset %}
+              <option value="{{ tag.id }}">{{ tag.name }}</option>
+            {% endfor %}
+          </select>
+          <span class="error-message">{{ form.tag.errors }}</span>
         </div>
 
         <div class="form-group mb-3">
           <label style="margin-top: 20px;" for="id_images" class="form-label">Projects Pictures</label>
-          <input type="file" class="form-control" id="id_images" name="images" multiple >
+          <input type="file" class="form-control" id="id_images" name="images" multiple required >
         </div>
 
         <div class="text-center mt-3">
@@ -122,5 +127,25 @@
       </form>
     </div>
   </div>
+  <script>
+    document.getElementById('projectForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Validate the newTag field using JavaScript
+        const newTagInput = document.getElementById('id_newTag');
+        const newTagError = document.getElementById('newTagError');
+        const newTagValue = newTagInput.value.trim();
+
+        // Check if the newTag value matches the regex pattern
+        const pattern = /^[a-zA-Z0-9_]*$/;
+        if (!pattern.test(newTagValue)) {
+            newTagError.textContent = 'Please enter valid tags with letters, digits, or underscores only.';
+            newTagInput.focus();
+        } else {
+            // Submit the form if validation passes
+            this.submit();
+        }
+    });
+</script>
 </body>
 </html>
