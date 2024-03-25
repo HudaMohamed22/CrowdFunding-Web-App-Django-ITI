@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+</head>
+<body>
+    <h1>User Profile</h1>
+    <div class="bigCont">
+        <div class="sidebar">
+            <a href="#">View Projects</a>
+            <a href="#">View Donations</a>
+        </div>
+        <div class="container">
+            <div class="row mt-50">
+                <div class="info">
+                    <img src="{{ user.customuser.profile_picture.url }}" alt="Profile Picture">
+                    <h1 class='mt-10'>{{ user.first_name }}</h1>
+                    <h5 class='mt-5'>{{ user.last_name}}</h5>
+                </div>
+                <div class="details">
+                    <div class="item d-flex">
+                        <div class="title">
+                            Full Name:
+                        </div>
+                        <div class="boody">
+                            {{ user.first_name }} {{ user.last_name }}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="item d-flex">
+                        <div class="title">
+                            Email:
+                        </div>
+                        <div class="boody">
+                            {{ user.username }}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="item d-flex">
+                        <div class="title">
+                            Mobile Number:
+                        </div>
+                        <div class="boody">
+                            {{ user.customuser.mobile_phone }}
+                        </div>
+                    </div>
+                    <hr>
+                    <button class='btn'>
+                        <a href="{% url 'edit.profile' %}">Edit Profile</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
