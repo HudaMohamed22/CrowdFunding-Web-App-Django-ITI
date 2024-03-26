@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+
+        function confirmDelete() {
+            if (confirm("Are you sure you want to delete your account?")) {
+                document.getElementById("deleteAccountModal").style.display = 'block'; //confirms? display modal
+            }
+        }
+
+        function closeModal() {
+            document.getElementById("deleteAccountModal").style.display = "none";
+        }
+
+    </script>
+</head>
+
+<body>
+    <h1>User Profile</h1>
+    <div class="bigCont">
+        <div class="sidebar">
+            <a href="#">View Projects</a>
+            <a href="#">View Donations</a>
+        </div>
+        <div class="container">
+            <div class="row mt-50">
+                <div class="info">
+                    <img src="{{ user.customuser.profile_picture.url }}" alt="Profile Picture">
+                    <h1 class='mt-10'>{{ user.first_name }}</h1>
+                    <h5 class='mt-5'>{{ user.last_name}}</h5>
+                </div>
+                <div class="details">
+                    <div class="item d-flex">
+                        <div class="title">
+                            <i class="fa fa-user-circle-o" aria-hidden="true"></i> Full Name:
+                        </div>
+                        <div class="boody">
+                            {{ user.first_name }} {{ user.last_name }}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="item d-flex">
+                        <div class="title">
+                            <i class="fa fa-envelope-o" aria-hidden="true"></i> Email:
+                        </div>
+                        <div class="boody">
+                            {{ user.username }}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="item d-flex">
+                        <div class="title">
+                            <i class="fa fa-phone" aria-hidden="true"></i> Mobile Number:
+                        </div>
+                        <div class="boody">
+                            {{ user.customuser.mobile_phone }}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="item d-flex">
+                        <div class="title">
+                            <i class="fa fa-calendar" aria-hidden="true"></i> Birthdate:
+                        </div>
+                        <div class="boody">
+                            {{ user.customuser.birthdate }}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="item d-flex">
+                        <div class="title">
+                            <i class="fa fa-facebook-official" aria-hidden="true"></i> Facebook Profile:
+                        </div>
+                        <div class="boody">
+                            {{ user.customuser.facebook_profile }}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="item d-flex">
+                        <div class="title">
+                            <i class="fa fa-globe" aria-hidden="true"></i> Country:
+                        </div>
+                        <div class="boody">
+                            {{ user.customuser.country }}
+                        </div>
+                    </div>
+                    <hr>
+                    <button class='btn'>
+                        <a href="{% url 'edit.profile' %}">Edit Profile</a>
+                    </button>
+                    <button onclick="confirmDelete()" class="btn2 btn-deactivate">Delete Account</button>
+
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+
+                    <!-- Delete account modal -->
+                    <div id="deleteAccountModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <h2>Confirm Account Deletion</h2>
+                            <form id="delete-account-form" method="post" action="{% url 'delete.account' %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="password">Enter your password to confirm deletion:</label>
+                                    <br><br>
+                                    <input type="password" class="form-control s-input" id="password" name="password">
+                                </div>
+                                <div class="btn-container">
+                                    <button type="submit" class="btn btn-deactivate">Confirm</button>
+                                    <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

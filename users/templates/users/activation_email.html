@@ -1,0 +1,9 @@
+{% autoescape off %}  
+Dear {{ user }},  
+Please click on the link below to activate your account.  
+{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+
+Sincerly,
+NileFund Team
+{% endautoescape %}  
