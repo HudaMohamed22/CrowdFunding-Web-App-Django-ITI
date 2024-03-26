@@ -107,14 +107,13 @@ def view_profile(request):
         return HttpResponseServerError("An error occurred: {}".format(str(e)))
     
 def edit_profile(request):
+    custom_user = request.user.customuser
     if request.method == 'POST':
-        custom_user = request.user.customuser
         user_form = UserProfileForm(request.POST, request.FILES, instance=custom_user)
         if user_form.is_valid():
             user_form.save()
             return redirect('profile')
     else:
-        custom_user = request.user.customuser
         user_form = UserProfileForm(instance=custom_user)
     return render(request, 'users/edit_profile.html', {'user_form': user_form})
 
@@ -149,3 +148,19 @@ def change_password(request):
         return render(request, 'users/change_password.html', {'form': form})
     except Exception as e:
         return HttpResponseServerError("An error occurred: {}".format(str(e)))
+    
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        # getting the password from the form
+        password = request.POST.get('password')
+        user = authenticate(username=request.user.username, password=password)
+
+        if user is not None:
+            user.delete()
+            messages.success(request, 'Your account has been successfully deleted.')
+            return redirect('home.landing')
+        else:
+            messages.error(request, 'Wrong password!')
+            
+    return redirect('profile')  

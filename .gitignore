@@ -3,3 +3,5 @@ project/migrations/*
 !project/migrations/__init__.py
 users/migrations/*
 !users/migrations/__init__.py
+*/_pycache _
+_pycache _/*
