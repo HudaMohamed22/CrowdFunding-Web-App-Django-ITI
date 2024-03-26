@@ -5,6 +5,7 @@ from project.forms import Project_ModelForm
 from django.contrib.auth.decorators import login_required
 from project.models import Project,Picture,Tag
 from users.models import CustomUser
+from django.contrib import messages #import messages
 import re
 
 
@@ -60,7 +61,10 @@ def createProject(request):
             for img in project_images:
                 Picture.objects.create(project=project, image=img)
 
-            return HttpResponse("User: {}".format(user_instance))
+           #----------------------- submit and redirect
+            messages.success(request, "Message sent." )
+            url = reverse("home.landing")
+            return redirect(url)  
 
     return render(request, 'project/create-project.html', context={"form":form})
 
