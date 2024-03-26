@@ -36,7 +36,7 @@ class Project(models.Model):
     rate = models.FloatField(default=0,null=True)
     current_donation = models.FloatField(default=0,null=True)
     is_featured = models.BooleanField(default=False)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="projects")
+    category = models.ForeignKey(Category,on_delete=models.SET_DEFAULT, default=None, related_name="projects")
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True)
     tag = models.ManyToManyField(Tag ,blank=True, related_name="projects")
 
