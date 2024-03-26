@@ -1,0 +1,54 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+
+{% block 'CSS_attachement' %}
+<link rel="stylesheet" href="{% static 'css/general_styles.css' %}">
+{% endblock %}
+
+{% block 'page-title' %}
+<title>NileFund - Category's Projects</title>
+{% endblock %}
+
+{% block 'hero-section-content' %}
+<!-- Start hero section -->
+<section class="d-flex align-items-center justify-content-center" id="hero-section" style="height: 250px; background-image: url('{% static 'homepage/images/header.png' %}'); background-position: center; background-size: cover">
+<div class="container">
+    <div class="d-flex align-items-center justify-content-center">
+        <h3><span class="fw-bold">Category:</span> {{ selected_category }}</h3>
+    </div>
+</div>
+</section>
+{% endblock %}
+
+{% block 'body-content' %}
+
+<div class="container my-5">
+    <div class="row mb-5">
+        {% for project in category_projects %}
+            <div class="col-12 col-md-6" width="20rem;">
+                <div class="shadow-sm p-2 d-flex">
+                    <div class="overflow-hidden">
+                        <img src="{{ project.image_url }}" class="d-block mx-auto" width="120px" height="110px" alt="" />
+                    </div>
+                    <div class="card-body px-4">
+                        <div class="mb-2">
+                            <h6 class="card-title d-inline-block">{{project.title}}</h6>
+                            <!-- <a href="{{book.show_url}}" class="btn btn-secondary py-0 px-1"><i class="fa-solid fa-eye"></i></a> -->
+                        </div>
+                        <p class="mb-3"><span class="fw-bold">Total Target:</span> {{project.total_target}}</p>
+                        <p class="mb-1"><span class="fw-bold">Start Date:</span> {{project.start_date}}</p>
+                        <p><span class="fw-bold">End Date:</span> {{project.end_date}}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block 'JS_attachement' %}
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock %}

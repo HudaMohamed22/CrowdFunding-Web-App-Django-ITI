@@ -95,3 +95,17 @@ class Project_ModelForm(forms.ModelForm):
     #     if start_date and (end_date <= start_date):
     #         print("pppppppppppp222222222222222")
     #         raise forms.ValidationError("End date should be greater than start date.")
+
+
+class Category_ModelForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
+
+    def clean_name(self):
+        name= self.cleaned_data['name']
+        if len(name) < 3:
+            raise forms.ValidationError("Category name must be at least 3 characters.")
+        elif Category.objects.filter(name=name).exists() and name != self.instance.name:
+            raise forms.ValidationError("Category name is already exist")
+        return name
