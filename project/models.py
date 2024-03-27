@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from users.models import CustomUser
+from django.shortcuts import get_object_or_404
 # Create your models here.
 
 def get_current_date():
@@ -16,6 +17,13 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+    @classmethod
+    def get_all_categories(cls):
+        return cls.objects.all()
+    
+    @classmethod
+    def get_category_by_id(cls, id):
+        return get_object_or_404(cls, id=id)
     
 # **************************** Tag **********************************
 class Tag(models.Model):
@@ -43,6 +51,11 @@ class Project(models.Model):
     def __str__(self):
         return self.title
     
+    @property
+    def image_url(self):
+        picture = self.images.first()
+        if picture:
+            return picture.image.url
     
 # ************************** Picture ***********************
 class Picture(models.Model):

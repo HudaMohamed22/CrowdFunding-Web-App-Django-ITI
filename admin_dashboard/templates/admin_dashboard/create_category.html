@@ -1,0 +1,43 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+
+{% block 'CSS_attachement' %}
+<link rel="stylesheet" href="{% static 'css/general_styles.css' %}">
+{% endblock %}
+
+{% block 'page-title' %}
+<title>NileFund - Create Category</title>
+{% endblock %}
+
+{% block 'hero-section-content' %}
+<!-- Start hero section -->
+<section class="d-flex align-items-center justify-content-center" id="hero-section" style="height: 250px; background-image: url('{% static 'homepage/images/header.png' %}'); background-position: center; background-size: cover">
+<div class="container">
+    <div class="d-flex align-items-center justify-content-center">
+        <h3>Create a new category</h3>
+    </div>
+</div>
+</section>
+{% endblock %}
+
+{% block 'body-content' %}
+<div class="container my-5 w-25 text-center">
+    <form method="post">
+        {% csrf_token %}
+        <!-- <span id="success-message"></span> -->
+        <div class="mb-3">
+            {{ categoryForm }}
+
+        </div>
+        <button type="submit" class="btn btn-special">Create</button>
+    </form>
+</div>
+    
+{% endblock %}
+
+
+
+{% block 'JS_attachement' %}
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock %}
