@@ -12,6 +12,12 @@
     
 }
 
+.hero-section-header-bg {
+    min-height: 250px; 
+    background-position: center; 
+    background-size: cover;
+}
+
 .bg-main-color {
     background-color: var(--main-color);
 }
