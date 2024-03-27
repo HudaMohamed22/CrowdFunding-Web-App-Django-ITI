@@ -31,10 +31,9 @@
                                 Remaining: EGP {{ project.remaining_target }}.00
                             {% endif %}
                         </div>
-                        <div class="proj-desc"> Details: {{ project.details }}</div>
+                        <!-- <div class="proj-desc"> Details: {{ project.details }}</div> -->
                         <span class="proj-text">Start Date: {{ project.start_date }}</span>
                         <span class="proj-text">End Date: {{ project.end_date }}</span>
-                        <!-- Add tags if needed -->
                         <div class="proj-tags">
                             Tags:
                             {% for tag in project.tag.all %}
