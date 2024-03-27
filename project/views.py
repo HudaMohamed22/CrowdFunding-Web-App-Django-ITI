@@ -82,6 +82,50 @@ def cancelProject(request, project_id):
         else:
             return HttpResponse("Can't Delete This Project Because the Donations Amount Exceed 25'%' of the Total Target")
 
+@login_required(login_url='login')
+def project_details(request, id):
+    project = get_object_or_404(Project, id=id)
+    tags = project.tag.all()
+    rate=int(project.rate) #tet3adel hayeb2a esmha avg rating
+    image_urls = project.get_image_urls()
+    comments= project.comments.all()
+    counter = list(range(len(image_urls)))
+    context = {
+        'project': project,
+        'tags': tags,
+        'image_urls': image_urls,
+        'counter': counter,
+        "rate": rate,
+        "comments": comments
+  
+    }
+
+    return render(request, "project/project_details.html", context)
+
+#mehtagen net2aked el far2 benhom 
+@login_required(login_url='login')
+
+def create_comment(request, project_id):
+    if not request.user.is_authenticated :
+        return redirect('login')  
+    else:
+        user = CustomUser.objects.get(pk=request.user.pk)
+        project = Project.objects.get(pk=project_id)
+        if request.method == 'POST':
+            comment_text = request.POST.get('comment', '')
+            if comment_text.strip():
+                comment = Comment.objects.create(
+                    comment=comment_text,
+                    project=project,
+                    user=user
+                )
+                return redirect('project_details', project_id)
+
+        return render(request, "project/project_details.html", context={"user": user, "project": project})
+
+
+
+
 
 def showProjectDetails(request, project_id):
         project = get_object_or_404(Project, pk=project_id)
