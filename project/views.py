@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from project.forms import  Project_ModelForm
 from django.contrib.auth.decorators import login_required
-from project.models import Donation, Project,Picture,Tag,Comment
+from project.models import Donation, Project,Picture,Tag,Comment,Rate
 from users.models import CustomUser
 from django.contrib import messages #import messages
 import re
@@ -134,3 +134,29 @@ def showProjectDetails(request, project_id):
         return render(request, "project/project_datails_test.html",
                     context={"project": project,"currentUser":user_instance,'target_threshold': target_threshold})
  
+
+@login_required(login_url='login')
+def rate_project(request, id):
+        if request.method == "POST":
+            project = get_object_or_404(Project, pk=id)
+            rate = request.POST.get('rate', 'empty')
+            if rate.isnumeric():
+                 customuser=CustomUser.objects.get(pk=request.user.pk)
+                 check_if_rating_exists(request,project, customuser, rate)
+
+        return redirect('project_details', id)
+
+
+def check_if_rating_exists(request,project, user, rating):
+    existing_rating = Rate.objects.filter(project=project, user=user).first()
+
+    if existing_rating:
+        existing_rating.rate = int(rating)
+        existing_rating.save()
+    else:
+       rate = Rate.create_rate(rate_value=rating, project_instance=project, user_instance=user)
+
+       if rate:
+            messages.success(request, f'Thank you for rating "{project.title}" with a rating of {rating}!')
+       else:
+            messages.error(request, 'Failed to add rate.')

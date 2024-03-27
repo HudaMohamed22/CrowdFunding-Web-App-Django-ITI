@@ -92,7 +92,19 @@ class Rate(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True)
 
     def __str__(self):
-        return self.rate   
+        return self.rate  
+    @classmethod
+    def create_rate(cls, rate_value, project_instance, user_instance=None):
+        try:
+            rate = cls(rate=rate_value, project=project_instance, user=user_instance)
+            rate.save()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return rate
+    
+     
 
 # ***************************** Comment **********************
 class Comment(models.Model):
