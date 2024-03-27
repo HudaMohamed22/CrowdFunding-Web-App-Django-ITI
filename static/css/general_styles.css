@@ -1,0 +1,151 @@
+:root {
+    --white-color : #FFFFFF;
+    --main-color: #EC6C5A;
+    --main-color-hover: #E96351;
+    --main-color-subtle: #FFE9E5;
+    
+    --secondary-color: #f8be60;
+    --secondary-color-subtle: #FFEED3;
+
+    --gray-color: #727272;
+    --gray-color-subtle:#e0e5eb;
+    
+}
+
+.hero-section-header-bg {
+    min-height: 250px; 
+    background-position: center; 
+    background-size: cover;
+}
+
+.bg-main-color {
+    background-color: var(--main-color);
+}
+
+.bg-main-color-subtle {
+    background-color: var(--main-color-subtle);
+    transition: all ease-in-out .4s;
+}
+
+.bg-main-color-subtle:hover {
+    background-color: var(--main-color);
+}
+
+.bg-main-color-subtle a,
+.bg-gray-color-subtle a,
+.bg-secondary-color-subtle a {
+    color: #333;
+    transition: all ease-in-out .4s;
+}
+
+.bg-gray-color {
+    background-color: var(--gray-color);
+}
+
+.bg-gray-color-subtle {
+    background-color: var(--gray-color-subtle);
+    transition: all ease-in-out .4s;
+}
+
+.bg-gray-color-subtle:hover {
+    background-color: var(--gray-color);
+}
+
+.bg-secondary-color {
+    background-color: var(--secondary-color);
+}
+
+.bg-secondary-color-subtle {
+    background-color: var(--secondary-color-subtle);
+    transition: all ease-in-out .4s;
+}
+
+.bg-secondary-color-subtle:hover {
+    background-color: var(--secondary-color);
+}
+
+
+.bg-main-color-subtle:hover a,
+.bg-gray-color-subtle:hover a,
+.bg-secondary-color-subtle:hover a {
+    color: var(--white-color);
+}
+
+.special-color {
+    color: var(--main-color);
+}
+
+.special-bg {
+    background-color: var(--main-color);
+}
+
+.btn-special,
+.btn-outline-special {
+    --bs-btn-border-color: var(--main-color);
+    --bs-btn-hover-color: var(--white-color);
+    --bs-btn-hover-bg: var(--main-color-hover);
+    --bs-btn-hover-border-color: var(--main-color-hover);
+    --bs-btn-active-color: var(--white-color);
+    --bs-btn-active-bg: var(--main-color-hover);
+    --bs-btn-active-border-color: var(--main-color-hover);
+    --bs-btn-disabled-border-color: var(--main-color-hover);
+}
+
+.btn-special {
+    --bs-btn-color: var(--white-color);
+    --bs-btn-bg: var(--main-color);
+    --bs-btn-disabled-color: var(--white-color);
+    --bs-btn-disabled-bg: var(--main-color-hover);
+}
+
+
+.btn-outline-special {
+    --bs-btn-color: var(--main-color);
+    --bs-btn-disabled-color: var(--main-color);
+    --bs-btn-disabled-bg: transparent;
+    --bs-gradient: none;
+}
+
+
+
+/* ======================= */
+.close-modal {
+    position: absolute;
+    top: 0rem;
+    right: 1.5rem;
+    font-size: 4rem;
+    color: #333;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.hidden {
+    display: none;
+}
+
+#modal {
+    position: absolute;
+    /* height: 90vh; */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+
+    background-color: white;
+    padding: 6rem;
+    border-radius: 5px;
+    box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    z-index: 5;
+}  

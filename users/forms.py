@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.hashers import make_password
 from django import forms
 from django.forms import ClearableFileInput
+from django.core.exceptions import ValidationError
 
 class RegisterModelForm(UserCreationForm):
     class Meta:
@@ -57,13 +58,32 @@ class RegisterModelForm(UserCreationForm):
         return last_name
 
 
+COUNTRY_CHOICES = [
+    ('None', 'Select Country'),  
+    ('EG', 'Egypt'),
+    ('US', 'United States'),
+    ('UK', 'United Kingdom'),
+]
+
 class UserProfileForm(forms.ModelForm):
+    country = forms.ChoiceField(choices=COUNTRY_CHOICES, required=False)
+
+
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'mobile_phone', 'profile_picture']
+        fields = ['first_name', 'last_name', 'mobile_phone', 'profile_picture', 'birthdate', 'facebook_profile', 'country']
         widgets = {
-            'profile_picture': ClearableFileInput(attrs={'multiple': False}),
+            'birthdate': forms.DateInput(attrs={'type': 'date'}),
+            'profile_picture': forms.ClearableFileInput(attrs={'multiple': False}),
         }
+
+    def validate_facebook_url(self, value):
+        # regex to match Facebook URLs
+        facebook_url_regex = r'^https?://(www\.)?facebook\.com/.+'
+        
+        if value and not re.match(facebook_url_regex, value):
+            return False
+        return True
 
     def clean_mobile_phone(self):
         mobile_phone = self.cleaned_data.get('mobile_phone')
@@ -89,6 +109,15 @@ class UserProfileForm(forms.ModelForm):
             return 'users/images/default_profile_picture.jpg'  # set default picture path
         return profile_picture
 
+    def clean_facebook_profile(self):
+        facebook_profile = self.cleaned_data.get('facebook_profile')
+        if facebook_profile:
+            if not self.validate_facebook_url(facebook_profile):
+                raise ValidationError('Invalid Facebook URL')
+        return facebook_profile
+
+
+    
 class ChangePasswordForm(forms.Form):
     current_password = forms.CharField(widget=forms.PasswordInput)
     new_password = forms.CharField(widget=forms.PasswordInput)

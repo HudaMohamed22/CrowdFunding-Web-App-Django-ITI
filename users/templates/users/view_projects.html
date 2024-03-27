@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="{% static 'users/css/viewProj.css' %}">
+</head>
+<body>
+    <section class="proj-list">
+        <div class="proj-grid-container">
+            {% for project in user_projects %}
+                <!-- Project cell -->
+                <div class="cell">
+                    <a href="#">
+                        <li>View details</li>
+                    </a>
+                    <div class="proj-image-wrapper">
+                        <img src="{{ project.image_url }}" class="product-image">
+                    </div>
+                    <div class="proj-info-container">
+                        <h3 class="proj-name">{{ project.title }}</h3>
+                        <h3 class="proj-goal">Project Target: EGP {{ project.total_target }}.00</h3>
+                        <div class="availability">
+                            {% if project.remaining_target <= 0 %}
+                                Fully Funded
+                            {% else %}
+                                Remaining: EGP {{ project.remaining_target }}.00
+                            {% endif %}
+                        </div>
+                        <!-- <div class="proj-desc"> Details: {{ project.details }}</div> -->
+                        <span class="proj-text">Start Date: {{ project.start_date }}</span>
+                        <span class="proj-text">End Date: {{ project.end_date }}</span>
+                        <div class="proj-tags">
+                            Tags:
+                            {% for tag in project.tag.all %}
+                                <span class="tag">{{ tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+</body>
+</html>

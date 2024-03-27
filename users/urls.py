@@ -1,5 +1,5 @@
 from django.urls import path
-from users.views import  register_user, login_user,logout_user, activate,change_password,edit_profile, view_profile
+from users.views import  register_user, login_user,logout_user, activate,change_password,edit_profile, view_profile,delete_account,view_projects
 
 
 urlpatterns = [
@@ -9,5 +9,7 @@ urlpatterns = [
     path('activate/<uidb64>/<token>', activate, name='activate'),
     path('profile', view_profile, name='profile'),
     path('edit-profile/', edit_profile, name='edit.profile'),
-    path('change-password/', change_password, name='change.password')
+    path('change-password/', change_password, name='change.password'),
+    path('delete-account/', delete_account, name='delete.account'),
+    path('view-projects/', view_projects, name='view.projects'),
 ]

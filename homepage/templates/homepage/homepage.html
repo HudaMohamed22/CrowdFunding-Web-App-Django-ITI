@@ -14,21 +14,27 @@
 
 {% block 'hero-section-content' %}
 <!-- Start hero section -->
-<section id="hero-section">
+<section class="vh-100" id="hero-section">
 <div class="container">
     <div class="row align-items-center">
     <div class="col-md-5 pe-5 mt-5">
         <h2 class="display-3 text-uppercase fw-bold mb-5">From Vision to Reality</h2>
         <p class="fs-4 my-4 pb-2">Be a part of something <span class="fw-bold">Extraordinary!!</span></p>
-        <div>
-        <form id="form" class="d-flex align-items-center position-relative ">
-            <input type="text" name="email" placeholder="search for a project"
-            class="form-control bg-white border-0 rounded-4 shadow-none px-4 py-3 w-100">
-            <button class="btn btn-special rounded-5 px-4 py-2 position-absolute align-items-center m-1 end-0">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-        </form>
-
+        <div class="rounded-5 border border-danger-subtle px-1">
+            <form method="GET" action="{% url 'search' %}" class="d-flex align-items-center position-relative">
+                <div class="m-1">
+                    <select name="search_option" id="id_search_option" class="form-select rounded-5 border border-danger-subtle">
+                        <option value="project">Project</option>
+                        <option value="tag">Tag</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="text" name="query" id="id_query" placeholder="search for a project" class="form-control bg-white border-0 rounded-4 shadow-none py-3 w-100" maxlength="100" required>
+                </div>
+                <button class="btn btn-special rounded-5 px-4 py-2 position-absolute align-items-center m-1 end-0">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
         </div>
     </div>
     <div class="col-md-7 mt-5">

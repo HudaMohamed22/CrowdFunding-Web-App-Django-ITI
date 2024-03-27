@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from users.models import CustomUser
+from django.shortcuts import get_object_or_404
 # Create your models here.
 
 def get_current_date():
@@ -18,6 +19,13 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+    @classmethod
+    def get_all_categories(cls):
+        return cls.objects.all()
+    
+    @classmethod
+    def get_category_by_id(cls, id):
+        return get_object_or_404(cls, id=id)
     
 # **************************** Tag **********************************
 class Tag(models.Model):
@@ -38,7 +46,7 @@ class Project(models.Model):
     rate = models.FloatField(default=0,null=True)
     current_donation = models.FloatField(default=0,null=True)
     is_featured = models.BooleanField(default=False)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="projects")
+    category = models.ForeignKey(Category,on_delete=models.SET_DEFAULT, default=None, related_name="projects")
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True)
     tag = models.ManyToManyField(Tag ,blank=True, related_name="projects")
 
@@ -51,6 +59,11 @@ class Project(models.Model):
     @classmethod
     def get_project_by_id(cls, id):
         return get_object_or_404(cls, id=id)
+    @property
+    def image_url(self):
+        picture = self.images.first()
+        if picture:
+            return picture.image.url
     
 # ************************** Picture ***********************
 class Picture(models.Model):
