@@ -1,0 +1,122 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block 'CSS_attachement' %}
+<link rel="stylesheet" href="{% static 'homepage/css/style.css' %}">
+
+{% endblock %}
+{% block 'page-title' %}
+<title>Project Details</title>
+{% endblock %}
+
+{% block 'body-content' %}
+<div class="container">
+    <div class="row">
+        <div class="mx-auto ">
+            <div class="col-lg-12 mx-auto d-flex justify-content-center flex-column">
+                <div class="d-flex justify-content-center p-5 flex-column">
+                    <h5 class="card-title" style="margin: 12px; font-size: 28px; font-weight: 500;">{{ project.title }}
+                    </h5>
+                    <div class="card " style="width: 30rem;">
+                        <div class="col-md-7" style="width: 100%;">
+                            <div id="carouselExampleIndicators" class="carousel slide w-100" data-bs-ride="carousel">
+                                <div class="carousel-indicators">
+                                    <button type="button" data-bs-target="#carouselExampleIndicators"
+                                        data-bs-slide-to="0" class="active" aria-current="true"
+                                        aria-label="Slide 1"></button>
+                                    {% for i in counter %}
+                                    <button type="button" data-bs-target="#carouselExampleIndicators"
+                                        data-bs-slide-to="{{ forloop.counter }}"
+                                        aria-label="Slide {{ forloop.counter }}"></button>
+                                    {% endfor %}
+                                </div>
+                                <div class="carousel-inner">
+                                    {% for image_url in image_urls %}
+                                    <div class="carousel-item{% if forloop.first %} active{% endif %}"
+                                        style="height:400px">
+                                        <img src="{{ image_url }}" class="d-block w-100 h-100 rounded"
+                                            alt="project-image">
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+
+                            </div>
+                            <div class="card-body">
+                                <h5 class="mt-3" style="font-size: 20px;">What The Funds Are For:</h5>
+
+                                <p class="card-text">{{ project.details }}</p>
+                                <p class=" text-secondary"><span class="text-sm text-dark">from: </span>
+                                    {{ project.created_at }}
+                                    <span class="text-sm text-dark"> to: </span>{{ project.end_date }}
+                                </p>
+                                <div class="tags_container">
+                                    {%for tag in tags%}
+                                    <a href="" class="py-1 px-2 rounded"
+                                        style="background-color: lightgray; color: black; text-decoration: none;">
+                                        {{ tag.name }}</a>
+                                    {% endfor %}
+                                </div>
+                                <span class="rating d-flex align-items-center mt-3">
+                                    <p class="text-muted fw-semibold m-0 me-2">Rating</p>
+                                    {% for star_num in '12345' %}
+                                    {% if star_num|add:0 <= rate%} <i class="fa-solid fa-star text-warning"></i>
+                                        {% else %}
+                                        <i class="fa-regular fa-star"></i>
+                                        {% endif %}
+                                        {% endfor %}
+                                </span>
+                                <h5 class="mt-5">Comments ({{ comments|length }}):</h5>
+                                <ul class="list-unstyled mt-4">
+                                    {% if comments %}
+                                    {% for comment in comments %}
+                                    <li class="">
+                                        <div class="comment d-flex">
+                                            <div class="col-md-8 mx-3">
+                                                <h6 class="comment-header mb-0 d-flex">
+                                                    {{ comment.user|title }}
+                                                </h6>
+                                                <p class="comment-time">
+                                                    <small><small>{{ comment.created_at }}</small></small>
+                                                </p>
+                                                <p class="comment-content">
+                                                    {{ comment.comment }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                    </li>
+                                    {% endfor %}
+                                    {% else %}
+                                    <li>No comments yet.</li>
+                                    {% endif %}
+                                    <hr />
+                                    <form class="d-flex flex-column align-items-end" method="post" action="{% url 'create_comment' project.id %}">
+                                        {% csrf_token %}
+                                        <label for="comment">Add a comment:</label>
+                                        <textarea id="comment" name="comment" rows="2" class="col-md-12 form-control"></textarea>
+                                        <button type="submit" class="btn btn-primary mt-2">Send</button>
+                                    </form>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{% endblock %}
+<!-- {% block 'JS_attachement' %}
+<script src="{% static 'homepage/js/script.js' %}"></script>
+{% endblock %} -->

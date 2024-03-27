@@ -1,4 +1,6 @@
 from django.db import models
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.utils import timezone
 from users.models import CustomUser
 # Create your models here.
@@ -43,6 +45,12 @@ class Project(models.Model):
     def __str__(self):
         return self.title
     
+    def get_image_urls(self):
+        return [image.image.url for image in self.images.all()]
+    
+    @classmethod
+    def get_project_by_id(cls, id):
+        return get_object_or_404(cls, id=id)
     
 # ************************** Picture ***********************
 class Picture(models.Model):
@@ -58,7 +66,7 @@ class Picture(models.Model):
 class Donation(models.Model):
     donation = models.FloatField()
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='donations')
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL,null=True)
 
     def __str__(self):
         return self.donation   
@@ -72,4 +80,13 @@ class Rate(models.Model):
 
     def __str__(self):
         return self.rate   
+
+# ***************************** Comment **********************
+class Comment(models.Model):
+    comment = models.TextField()
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
+    def __str__(self):
+        return str(f'comment by {self.user.first_name} {self.user.last_name}  on {self.project.title} project.')
