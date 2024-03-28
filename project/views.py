@@ -8,8 +8,8 @@ from project.models import Donation, Project,Picture,Tag,Comment,Rate
 from users.models import CustomUser
 from django.contrib import messages #import messages
 import re
-
-
+from django.db.models import Sum, Count
+from datetime import date, datetime
 
 @login_required(login_url='login')
 def createProject(request):
@@ -86,18 +86,38 @@ def cancelProject(request, project_id):
 def project_details(request, id):
     project = get_object_or_404(Project, id=id)
     tags = project.tag.all()
-    rate=int(project.rate) #tet3adel hayeb2a esmha avg rating
     image_urls = project.get_image_urls()
     comments= project.comments.all()
-    counter = list(range(len(image_urls)))
+    counter = list(range(len(image_urls)-1))
+    total_donation = Donation.objects.aggregate(total=Sum('donation'))['total']
+    donation_count = Donation.objects.aggregate(count=Count('id'))['count']
+    total_rate = Rate.objects.aggregate(total=Sum('rate'))['total']
+    rate_count = Rate.objects.aggregate(count=Count('rate'))['count']
+    average_rating=int(total_rate/rate_count)
+    donation_average=(total_donation*100)/project.total_target
+    days_left = (project.end_date - date.today()).days
+    user=CustomUser.objects.get(pk=request.user.pk)
+    rate_by_user=0
+    try:
+        user_rate = Rate.objects.get(user_id=user.pk).rate
+    except ObjectDoesNotExist:
+        user_rate = 0
+    target_cancel_check=project.total_target*.25
     context = {
         'project': project,
         'tags': tags,
         'image_urls': image_urls,
         'counter': counter,
-        "rate": rate,
-        "comments": comments
-  
+        "rate": user_rate,
+        "comments": comments,
+        "donation_count":donation_count,
+        "total_donation":  total_donation,    
+        "donation_average":donation_average,
+        "average_rating":average_rating,
+        "days_left":days_left,
+        "user":user,
+        "target_cancel_check":target_cancel_check,
+        "rate_by_user": rate_by_user
     }
 
     return render(request, "project/project_details.html", context)
