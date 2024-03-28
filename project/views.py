@@ -93,8 +93,14 @@ def project_details(request, id):
     donation_count = Donation.objects.aggregate(count=Count('id'))['count']
     total_rate = Rate.objects.aggregate(total=Sum('rate'))['total']
     rate_count = Rate.objects.aggregate(count=Count('rate'))['count']
-    average_rating=int(total_rate/rate_count)
-    donation_average=(total_donation*100)/project.total_target
+    if total_rate is not None and rate_count is not None and rate_count != 0:
+        average_rating = total_rate / rate_count
+    else:
+        average_rating = 0 
+    if total_donation is not None and project.total_target is not None and project.total_target != 0:
+        donation_average = (total_donation * 100) / project.total_target
+    else:
+        donation_average = 0     
     days_left = (project.end_date - date.today()).days
     user=CustomUser.objects.get(pk=request.user.pk)
     rate_by_user=0
