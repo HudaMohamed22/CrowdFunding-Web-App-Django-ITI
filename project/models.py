@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from users.models import CustomUser
-from django.shortcuts import get_object_or_404
+from django.shortcuts import reverse,get_object_or_404
 # Create your models here.
 
 def get_current_date():
@@ -115,3 +115,30 @@ class Comment(models.Model):
     
     def __str__(self):
         return str(f'comment by {self.user.first_name} {self.user.last_name}  on {self.project.title} project.')
+
+
+# ***************************** Comment **********************
+class Comment(models.Model):
+    comment = models.TextField()
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def _str_(self):
+        return str(f'comment by {self.user.first_name} {self.user.last_name}  on {self.project.title} project.')
+    @property
+    def show_url(self):
+        url = reverse('project_details', args=[self.id])
+        return url    
+    
+# ***************************** Project_Report **********************
+class Project_Report(models.Model):
+    reason = models.TextField(default="No Reason Provided")
+    project = models.ForeignKey(Project, on_delete=models.CASCADE,related_name='Project_Reports')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='Project_Reports')
+
+# ***************************** Comment_Report **********************
+class Comment_Report(models.Model):
+    reason = models.TextField(default="Abused Comment",null=True)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE,related_name='Comment_Reports')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='Comment_Reports')    
