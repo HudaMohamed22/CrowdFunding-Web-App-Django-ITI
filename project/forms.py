@@ -1,5 +1,5 @@
 from django import  forms
-from project.models import  Project,Category,Tag
+from project.models import  Project,Category,Tag,Project_Report,Comment_Report
 from datetime import datetime
 from django.forms.widgets import NumberInput
 
@@ -53,15 +53,6 @@ class Project_ModelForm(forms.ModelForm):
         if total_target is not None and total_target <= 0:
             raise forms.ValidationError("Total Target must be a positive number.")
         return total_target
-    
-    # def clean_tag(self):
-    #     tags = self.cleaned_data.get('tag')
-    #     if tags:
-    #         for tag in tags:
-    #             if not tag.name.isalnum():
-    #                 raise forms.ValidationError("Tags should only contain letters or numbers.")
-    #     return tags
-    
 
     def clean(self):
         cleaned_data = super().clean()
@@ -78,24 +69,6 @@ class Project_ModelForm(forms.ModelForm):
             if (start_date) and end_date <= start_date:
                 self._errors["end_date"] = self.error_class(["End date should be greater than start date."])
 
-    # give me this field can't be null !!
-    # def clean_end_time(self):
-    #     start_date = self.cleaned_data.get("start_date")
-    #     end_date = self.cleaned_data.get("end_time")
-    #     print(end_date)
-    #     print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    #     today_date = datetime.now().date()
-    #     print(today_date)
-    #     print("ffffffffffffffffffffffffffffffffff")
-
-    #     if today_date >= end_date:
-    #         print("oooooooooooooo1111111111")
-    #         raise forms.ValidationError("End date should be greater than Today date.")
-        
-    #     if start_date and (end_date <= start_date):
-    #         print("pppppppppppp222222222222222")
-    #         raise forms.ValidationError("End date should be greater than start date.")
-
 
 class Category_ModelForm(forms.ModelForm):
     class Meta:
@@ -109,3 +82,21 @@ class Category_ModelForm(forms.ModelForm):
         elif Category.objects.filter(name=name).exists() and name != self.instance.name:
             raise forms.ValidationError("Category name is already exist")
         return name
+    
+class Report_ModelForm(forms.ModelForm):
+    reason = forms.CharField( 
+        widget=forms.Textarea(attrs={"placeholder": "Reason of reporting", "class": "form-control"}),
+    )
+
+    class Meta:
+        model=Project_Report
+        fields=['reason']    
+
+class ProjectReport_ModelForm(forms.ModelForm):
+    reason = forms.CharField( 
+        widget=forms.Textarea(attrs={"placeholder": "Reason of reporting", "class": "form-control"}),
+    )
+
+    class Meta:
+        model=Project_Report
+        fields=['reason']   

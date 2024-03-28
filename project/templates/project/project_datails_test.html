@@ -8,31 +8,39 @@
 </head>
 <body>
   {% include "project/deleteDialog.html" %}
+  {% include "project/ReportProjectDialog.html" %}
 
-  {% if project.owner == currentUser %}
-  <button data-bs-toggle="modal" data-bs-target="#deleteDialog" class="col-md-10 btn bg-gradient-primary p-2 mt-4 mx-auto h6" {% if project.current_donation >= target_threshold %}disabled{% endif %}><i class="fa-solid fa-trash"></i><small class="mx-2">Cancel Project</small></button>
-  {% if project.current_donation >= target_threshold %}
-  <div class="d-flex align-items-center w-75 mx-auto">
-    <i class="fas fa-exclamation-circle text-danger fa-lg me-2"></i>
-    <p class="mx-2 text-sm mb-0 text-danger">
-      Project cancellation is not allowed. Donation exceeds 25% of the total target.
-    </p>
-  </div>
-  {% endif %}
-  {% else %}
-  <!-- User is not authorized to cancel project -->
-  <div class="alert alert-danger" role="alert">
-    You are not authorized to cancel this project.
-  </div>
-  {% endif %}
+  {% if project.owner != currentUser %}
+        <button data-bs-toggle="modal" data-bs-target="#deleteDialog" class="col-md-10 btn bg-gradient-primary p-2 mt-4 mx-auto h6" {% if project.current_donation >= target_threshold %}disabled{% endif %}><i class="fa-solid fa-trash"></i><small class="mx-2">Cancel Project</small></button>
+        {% if project.current_donation >= target_threshold %}
+        <div class="d-flex align-items-center w-75 mx-auto">
+            <i class="fas fa-exclamation-circle text-danger fa-lg me-2"></i>
+            <p class="mx-2 text-sm mb-0 text-danger">
+            Project cancellation is not allowed. Donation exceeds 25% of the total target.
+            </p>
+        </div>
+        {% endif %}
+    {% else %}
+      <button data-bs-toggle="modal" data-bs-target="#ReportDialog" class="btn btn-transparent shadow-none text-center mt-2 p-0" ><i class="fa-solid fa-flag"></i><small class="mx-2">Report Project</small></button>
+      {% if 20 >= 10 %}
+      <div class="d-flex align-items-center w-75 mx-auto">
+          <i class="fas fa-exclamation-circle text-danger fa-lg me-2"></i>
+          <p class="mx-2 text-sm mb-0 text-danger">
+             Suspended Project (Has Many Reports)
+          </p>
+      </div>
+      {% for comment in comments %}
+      <a href="{% url 'create_commentReport' comment.id %}" class="col-md-10 btn bg-gradient-primary p-2 mt-4 mx-auto h6"><i class="fa-solid fa-flag"></i><small class="mx-2">Report Comment</small></a>
+    {% endfor %}
+    
+      {% endif %}
+
+    {% endif %}
 
   <!-- Bootstrap JavaScript and other scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-  <!-- Initialize Bootstrap modal -->
-  <script>
-    var myModal = new bootstrap.Modal(document.getElementById('deleteDialog'));
-  </script>
+
 </body>
 </html>
