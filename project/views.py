@@ -1,9 +1,10 @@
+from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.shortcuts import redirect, render, reverse,get_object_or_404
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from project.forms import Project_ModelForm,ProjectReport_ModelForm
 from django.contrib.auth.decorators import login_required
-from project.models import Project,Picture,Tag,Comment,Project_Report,Comment_Report
+from project.models import Donation, Project,Picture,Tag,Comment,Rate,Comment,Project_Report,Comment_Report
 from users.models import CustomUser
 from django.contrib import messages #import messages
 import re
@@ -81,6 +82,50 @@ def cancelProject(request, project_id):
         else:
             return HttpResponse("Can't Delete This Project Because the Donations Amount Exceed 25'%' of the Total Target")
         
+@login_required(login_url='login')
+def project_details(request, id):
+    project = get_object_or_404(Project, id=id)
+    tags = project.tag.all()
+    rate=int(project.rate) #tet3adel hayeb2a esmha avg rating
+    image_urls = project.get_image_urls()
+    comments= project.comments.all()
+    counter = list(range(len(image_urls)))
+    context = {
+        'project': project,
+        'tags': tags,
+        'image_urls': image_urls,
+        'counter': counter,
+        "rate": rate,
+        "comments": comments
+  
+    }
+
+    return render(request, "project/project_details.html", context)
+
+#mehtagen net2aked el far2 benhom 
+@login_required(login_url='login')
+
+def create_comment(request, project_id):
+    if not request.user.is_authenticated :
+        return redirect('login')  
+    else:
+        user = CustomUser.objects.get(pk=request.user.pk)
+        project = Project.objects.get(pk=project_id)
+        if request.method == 'POST':
+            comment_text = request.POST.get('comment', '')
+            if comment_text.strip():
+                comment = Comment.objects.create(
+                    comment=comment_text,
+                    project=project,
+                    user=user
+                )
+                return redirect('project_details', project_id)
+
+        return render(request, "project/project_details.html", context={"user": user, "project": project})
+
+
+
+
 @login_required(login_url='login')        
 def create_ProjectReport(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
@@ -134,3 +179,29 @@ def showProjectDetails(request, project_id):
                     context={"project": project,"currentUser":user_instance,'target_threshold': target_threshold,
                             "report_project_Form":report_project_Form ,"comments":comments})
  
+
+@login_required(login_url='login')
+def rate_project(request, id):
+        if request.method == "POST":
+            project = get_object_or_404(Project, pk=id)
+            rate = request.POST.get('rate', 'empty')
+            if rate.isnumeric():
+                 customuser=CustomUser.objects.get(pk=request.user.pk)
+                 check_if_rating_exists(request,project, customuser, rate)
+
+        return redirect('project_details', id)
+
+
+def check_if_rating_exists(request,project, user, rating):
+    existing_rating = Rate.objects.filter(project=project, user=user).first()
+
+    if existing_rating:
+        existing_rating.rate = int(rating)
+        existing_rating.save()
+    else:
+       rate = Rate.create_rate(rate_value=rating, project_instance=project, user_instance=user)
+
+       if rate:
+            messages.success(request, f'Thank you for rating "{project.title}" with a rating of {rating}!')
+       else:
+            messages.error(request, 'Failed to add rate.')

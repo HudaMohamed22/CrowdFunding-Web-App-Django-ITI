@@ -9,12 +9,12 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
-
 from .tokens import account_activation_token
 from users.forms import UserProfileForm
 from .forms import UserProfileForm, ChangePasswordForm
 from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseServerError
+from project.models import Project
 
 def activateEmail(request, user, to_email):
     mail_subject = "NileFund Account Activation."
@@ -164,3 +164,14 @@ def delete_account(request):
             messages.error(request, 'Wrong password!')
             
     return redirect('profile')  
+
+
+def view_projects(request):
+  
+    user_projects = Project.objects.filter(owner=request.user)
+
+    for project in user_projects: #subtraction process
+        project.remaining_target = project.total_target - project.current_donation
+
+    # pass the projects to the template context
+    return render(request, 'users/view_projects.html', {'user_projects': user_projects})
