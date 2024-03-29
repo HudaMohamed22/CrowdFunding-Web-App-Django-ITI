@@ -89,32 +89,34 @@ def project_details(request, id):
     image_urls = project.get_image_urls()
     comments= project.comments.all()
     counter = list(range(len(image_urls)-1))
-    # another nooote i used the project.current_donation  in my conditions supposing you noran will handle it in the user donation function  
     total_donation =  project.donations.aggregate(total=Sum('donation'))['total'] or 0
     donation_count =  project.donations.aggregate(count=Count('id'))['count'] or 0
-
     total_rate = project.rates.aggregate(total=Sum('rate'))['total'] or 0
     rate_count = project.rates.aggregate(count=Count('rate'))['count'] or 0
+    days_left = (project.end_date - date.today()).days
+    user=get_object_or_404(CustomUser,pk=request.user.pk)
+    rate_by_user=0
+    target_threshold = project.total_target * 0.25
+    reportsNumber = project.Project_Reports.all().count() 
+    report_project_Form = ProjectReport_ModelForm()
+    
     if total_rate is not None and rate_count is not None and rate_count != 0:
         average_rating = total_rate / rate_count
     else:
         average_rating = 0 
 
+
     if total_donation is not None and project.total_target is not None and project.total_target != 0:
         donation_average = (total_donation * 100) / project.total_target
     else:
         donation_average = 0     
-    days_left = (project.end_date - date.today()).days
-    user=get_object_or_404(CustomUser,pk=request.user.pk)
-    rate_by_user=0
+    
     try:
         user_rate = Rate.objects.get(user_id=user.pk).rate
     except ObjectDoesNotExist:
         user_rate = 0
 
-    target_threshold = project.total_target * 0.25
-    reportsNumber = project.Project_Reports.all().count() 
-    report_project_Form = ProjectReport_ModelForm()
+
 
     context = {
         'project': project,
@@ -149,7 +151,7 @@ def create_comment(request, project_id):
         if request.method == 'POST':
             comment_text = request.POST.get('comment', '')
             if comment_text.strip():
-                comment = Comment.objects.create(
+                Comment.objects.create(
                     comment=comment_text,
                     project=project,
                     user=user
@@ -158,7 +160,29 @@ def create_comment(request, project_id):
 
         return render(request, "project/project_details.html", context={"user": user, "project": project})
 
-
+def add_donations(request, project_id):
+    if not request.user.is_authenticated :
+        return redirect('login')  
+    else:
+        user = CustomUser.objects.get(pk=request.user.pk)
+        project = Project.objects.get(pk=project_id)
+        error_message = None 
+        if request.method == "POST":
+                donationAmount = request.POST.get('donation', '')
+                if donationAmount.strip():
+                    donationAmount = float(donationAmount)
+                    if donationAmount + project.current_donation > project.total_target:
+                        error_message ="Donation amount cannot exceed the total target."
+                    else:    
+                        Donation.objects.create(
+                            donation=donationAmount,
+                            project=project,
+                            user=user
+                        )
+                        project.current_donation+=donationAmount
+                        project.save()
+                        return redirect('project_details', project_id)
+        return render(request, "project/project_details.html", context={"user": user, "project": project,"error_message": error_message})
 
 
 @login_required(login_url='login')        
@@ -199,6 +223,9 @@ def create_commentReport(request, comment_id):
         comment.delete()
     url = reverse("project_details", kwargs={'id': project.pk})
     return redirect(url)  
+
+
+
 
 def is_spam_comment(user_id, comment_id):
     return (Comment_Report.objects.filter(user=user_id, comment=comment_id).count() >= 3)
