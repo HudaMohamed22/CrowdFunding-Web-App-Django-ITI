@@ -9,8 +9,8 @@ urlpatterns = [
     path('cancelProject/<int:project_id>',cancelProject,name='cancel_project'),
     path('<int:id>/rate', rate_project, name='rate_project'),
     path('createProjectReport/<int:project_id>',create_ProjectReport,name='create_ProjectReport'),
-    path('create_CommentReport/<int:comment_id>',create_commentReport,name='create_commentReport')
-
+    path('create_CommentReport/<int:comment_id>',create_commentReport,name='create_commentReport'),
+    path('<int:project_id>/donate', views.add_donations, name='add_donations'),
 
 
     #path('<int:id>/test',test,name='test'),

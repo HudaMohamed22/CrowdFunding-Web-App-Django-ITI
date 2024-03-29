@@ -55,6 +55,7 @@
 {% block 'body-content' %}
 {% include "project/deleteDialog.html" %}
 {% include "project/ReportProjectDialog.html" %}
+{% include "project/donationDialog.html" %}
 
 <div class="container" style="display: flex; flex-direction: row;">
     <div class="row">
@@ -229,7 +230,7 @@
             {% endif %}
         {% else %}
         
-        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" {% if days < 0 or reportsNumber > 10 or project.current_donation >= project.total_target %}disabled{% endif %} class="col-md-10 btn btn-success bg-gradient-primary p-2 mt-4 mx-auto h6" href="#">
+        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" {% if days_left < 0 or reportsNumber > 10 or project.current_donation >= project.total_target %}disabled{% endif %} class="col-md-10 btn btn-success bg-gradient-primary p-2 mt-4 mx-auto h6">
             <b>DONATE</b>     
         </button>
           
