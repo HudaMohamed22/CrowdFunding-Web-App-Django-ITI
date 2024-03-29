@@ -21,6 +21,7 @@ from django.urls import include
 # to make the path of media work well 
 from django.conf import settings
 from django.conf.urls.static import static
+from admin_dashboard.views import page_403
 
 
 
@@ -30,4 +31,5 @@ urlpatterns = [
     path('home/', include('homepage.urls')),
     path('', include('users.urls')),
     path('admin_dashboard/', include('admin_dashboard.urls')),
+    path('forbidden', page_403, name='forbidden_access'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

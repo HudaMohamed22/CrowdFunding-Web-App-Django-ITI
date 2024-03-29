@@ -4,14 +4,18 @@ from project.forms import Category_ModelForm
 from project.models import Category, Project
 from django.http import JsonResponse
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from .decorators import admin_required
 
 # Create your views here.
 
-
+@login_required
+@admin_required
 def landing(request):
     return render(request, "admin_dashboard/dashboard.html")
 
-
+@login_required
+@admin_required
 def create_new_category(request):
     form = Category_ModelForm()
     if request.method == 'POST':
@@ -32,7 +36,8 @@ def show_categories(request):
     categories = Category.get_all_categories()
     return render(request, 'admin_dashboard/all_categories.html', {'categories': categories})
 
-
+@login_required
+@admin_required
 def edit_specific_category(request, category_id):
     selected_category = Category.get_category_by_id(category_id)
     form = Category_ModelForm(instance=selected_category)
@@ -44,25 +49,29 @@ def edit_specific_category(request, category_id):
     return render(request, 'admin_dashboard/edit_category.html', context={"categoryForm": form})
 
 
-
+@login_required
+@admin_required
 def delete_specific_category(request, category_id):
     deleted_category = Category.objects.get(id=category_id)
     deleted_category.delete()
     url = reverse('all_categories')
     return redirect(url)
 
-
+@login_required
 def category_projects(request, category_id):
     selected_category = Category.get_category_by_id(category_id)
-    category_projects = Project.objects.filter(category_id=category_id)
-    # category_projects = Project.objects.filter(category_id=category_id, owner_id=request.user.id)
+    if not request.user.is_superuser:
+        category_projects = Project.objects.filter(category_id=category_id, owner_id=request.user.id)
+    else:
+        category_projects = Project.objects.filter(category_id=category_id)
     return render(request, 'admin_dashboard/category_projects.html', {'category_projects': category_projects, 'selected_category':selected_category})
 
 def show_projects(request):
     projects = Project.objects.all()
     return render(request, "admin_dashboard/all_Projects.html", {'projects': projects})
 
-
+@login_required
+@admin_required
 def mark_featured(request):
     if request.method == 'POST':
         project_id = request.POST.get('project_id')
@@ -78,3 +87,5 @@ def mark_featured(request):
             return JsonResponse({'error': str(e)}, status=500)
     return redirect('all_projects')
 
+def page_403(request):
+    return render(request, "403.html")

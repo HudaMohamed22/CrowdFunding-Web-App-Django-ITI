@@ -27,8 +27,8 @@
     <div class="row flex-wrap">
         {% for project in projects %}
         <div class="col-md-3 shadow-sm rounded-3 m-2 proj-item">
-            <div class="mx-auto" style="width: 10rem;">
-                <img src="{{ project.image_url }}" class="img-fluid">
+            <div class="my-2" style="width: 10.5rem;">
+                <img src="{{ project.image_url }}" class="d-block mx-auto w-auto h-100">
             </div>
 
             <div class="">
@@ -50,11 +50,11 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="controllers">
+            <div class="controllers d-flex flex-column">
                 {% if user.is_superuser %}
-                    <form id="projectForm{{ project.id }}" method="POST" action="{% url 'mark_featured' %}">
+                    <form id="projectForm{{ project.id }}" method="POST" action="{% url 'mark_featured' %}" class="align-self-end">
                         {% csrf_token %}
-                        <input type="hidden" name="project_id" value="{{ project.id }}">
+                            <input type="hidden" name="project_id" value="{{ project.id }}">
                             <input type="checkbox" class="btn-check" autocomplete="off" id="{{ project.id }}" name="is_featured" {% if project.is_featured %}checked{% endif %} onchange="submitForm({{ project.id }})">
                             <label class="btn btn-outline-special" for="{{ project.id }}">Featured</label>                    
                     </form>
