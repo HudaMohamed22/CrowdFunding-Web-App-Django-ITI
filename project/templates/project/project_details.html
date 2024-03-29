@@ -53,6 +53,9 @@
 {% endblock %}
 
 {% block 'body-content' %}
+{% include "project/deleteDialog.html" %}
+{% include "project/ReportProjectDialog.html" %}
+
 <div class="container" style="display: flex; flex-direction: row;">
     <div class="row">
         <div class="mx-auto ">
@@ -137,9 +140,9 @@
                                                 <p class="comment-content">
                                                     {{ comment.comment }}
                                                 </p>
-                                                <button class="btn btn-transparent shadow-none text-center mt-2 p-0" href=""><i
+                                                <a href="{% url 'create_commentReport' comment.id %}" class="btn btn-transparent shadow-none text-center mt-2 p-0" href=""><i
                                                     class="fa-solid fa-flag "></i><small class="mx-2">Report </small>
-                                                </button>
+                                                </a>
                                             </div>
                                         </div>
                                         <hr />
@@ -215,22 +218,21 @@
             </div>
         </div>
         {% if project.owner == user %}
-        <button data-bs-toggle="modal" data-bs-target="#deleteModal"
-            class="col-md-10 btn bg-gradient-primary p-2 mt-4 mx-auto h6" {% if total_donation > target_cancel_check %} disabled {% endif %}><i class="fa-solid fa-trash"></i><small class="mx-2">Cancel Project</small></button>
-            {% if total_donation > target_cancel_check %}
-        <div class="d-flex align-items-center w-75 mx-auto">
-            <i class="fa fa-circle-info text-secondary"></i>
-            <p class="mx-2 text-sm mb-0 text-center">
-                Cannot cancel project while donation greater than 25% of the total target !!
-            </p>
-        </div>
-        {% endif %}
+        <button data-bs-toggle="modal" data-bs-target="#deleteDialog" class="col-md-10 btn bg-gradient-primary p-2 mt-4 mx-auto h6" {% if project.current_donation >= target_threshold %}disabled{% endif %}><i class="fa-solid fa-trash"></i><small class="mx-2">Cancel Project</small></button>
+            {% if project.current_donation >=  target_threshold %}
+            <div class="d-flex align-items-center w-75 mx-auto">
+                <i class="fas fa-exclamation-circle text-danger fa-lg me-2"></i>
+                <p class="mx-2 text-sm mb-0 text-danger">
+                Project cancellation is not allowed. Donation exceeds 25% of the total target.
+                </p>
+            </div>
+            {% endif %}
         {% else %}
-
-        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" {% if days < 0 %}disabled{% endif %} class="col-md-10 btn btn-success bg-gradient-primary p-2 mt-4 mx-auto h6" href="">
-          <b>DONATE</b>
-        </button>
         
+        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" {% if days < 0 or reportsNumber > 10 or project.current_donation >= project.total_target %}disabled{% endif %} class="col-md-10 btn btn-success bg-gradient-primary p-2 mt-4 mx-auto h6" href="#">
+            <b>DONATE</b>     
+        </button>
+          
         <div class="feedback d-flex flex-column align-items-center">
             <form method="post" action="">
               {% csrf_token %}
@@ -250,12 +252,15 @@
             </form>
           </div>
 
-          <form action="" method="POST" class="text-center">
-            {%csrf_token%}
-            <button class="btn btn-transparent shadow-none text-center mt-2 p-0" href=""><i
-                class="fa-solid fa-flag"></i><small class="mx-2">Report this project</small>
-            </button>
-          </form>
+          <button data-bs-toggle="modal" data-bs-target="#ReportDialog" class="btn btn-transparent shadow-none text-center mt-2 p-0" ><i class="fa-solid fa-flag"></i><small class="mx-2">Report Project</small></button>
+          {% if reportsNumber > 10 %}
+          <div class="d-flex align-items-center w-75 mx-auto" style="padding-left: 60px; padding-top 40px;">
+            <i class="fas fa-exclamation-circle text-danger fa-lg me-2"></i>
+                <p class="mx-2 text-sm mb-0 text-danger">
+                    Suspended Project (Has Many Reports)
+                </p>
+        </div>
+          {% endif %}
 
         {% endif %}
     </div>

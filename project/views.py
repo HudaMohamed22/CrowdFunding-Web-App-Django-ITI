@@ -89,26 +89,36 @@ def project_details(request, id):
     image_urls = project.get_image_urls()
     comments= project.comments.all()
     counter = list(range(len(image_urls)-1))
+    # *noooooooooooooooooooooooooooooote* must be related to specific project not all Donation objects 
+    # or you can replace it by project.current_donation field *it suppose to be the total donation amout of a project* it must be handle in donation function 
+    # another nooote i used the project.current_donation  in my conditions supposing you noran will handle it in the user donation function  
     total_donation = Donation.objects.aggregate(total=Sum('donation'))['total']
     donation_count = Donation.objects.aggregate(count=Count('id'))['count']
+
+     # *noooooooooooooooooooooooooooooote* must be related to specific project not all Donation objects
     total_rate = Rate.objects.aggregate(total=Sum('rate'))['total']
     rate_count = Rate.objects.aggregate(count=Count('rate'))['count']
     if total_rate is not None and rate_count is not None and rate_count != 0:
         average_rating = total_rate / rate_count
     else:
         average_rating = 0 
+
     if total_donation is not None and project.total_target is not None and project.total_target != 0:
         donation_average = (total_donation * 100) / project.total_target
     else:
         donation_average = 0     
     days_left = (project.end_date - date.today()).days
-    user=CustomUser.objects.get(pk=request.user.pk)
+    user=get_object_or_404(CustomUser,pk=request.user.pk)
     rate_by_user=0
     try:
         user_rate = Rate.objects.get(user_id=user.pk).rate
     except ObjectDoesNotExist:
         user_rate = 0
-    target_cancel_check=project.total_target*.25
+
+    target_threshold = project.total_target * 0.25
+    reportsNumber = project.Project_Reports.all().count() 
+    report_project_Form = ProjectReport_ModelForm()
+
     context = {
         'project': project,
         'tags': tags,
@@ -122,7 +132,9 @@ def project_details(request, id):
         "average_rating":average_rating,
         "days_left":days_left,
         "user":user,
-        "target_cancel_check":target_cancel_check,
+        'target_threshold': target_threshold,
+        "reportsNumber":reportsNumber,
+        "report_project_Form":report_project_Form,
         "rate_by_user": rate_by_user
     }
 
@@ -165,11 +177,11 @@ def create_ProjectReport(request, project_id):
                 report.project=project
                 report.save()
            
-    url = reverse("show", kwargs={'project_id': project_id})
+    url = reverse("project_details", kwargs={'id': project_id})
     return redirect(url)       
 
 def is_spam(user_id, project_id):
-    return (Project_Report.objects.filter(user=user_id, project=project_id).count() > 3)
+    return (Project_Report.objects.filter(user=user_id, project=project_id).count() >= 3)
 
 
 
@@ -188,23 +200,12 @@ def create_commentReport(request, comment_id):
                 )
     if comment.Comment_Reports.all().count() > 10: 
         comment.delete()
-    url = reverse("show", kwargs={'project_id': project.pk})
+    url = reverse("project_details", kwargs={'id': project.pk})
     return redirect(url)  
 
 def is_spam_comment(user_id, comment_id):
     return (Comment_Report.objects.filter(user=user_id, comment=comment_id).count() >= 3)
 
-# just for test 
-def showProjectDetails(request, project_id):
-        project = get_object_or_404(Project, pk=project_id)
-        user_instance = get_object_or_404(CustomUser,pk=request.user.pk)
-        comments = project.comments.all()
-        target_threshold = project.total_target*.25
-        report_project_Form = ProjectReport_ModelForm()
-        return render(request, "project/project_datails_test.html",
-                    context={"project": project,"currentUser":user_instance,'target_threshold': target_threshold,
-                            "report_project_Form":report_project_Form ,"comments":comments})
- 
 
 @login_required(login_url='login')
 def rate_project(request, id):
