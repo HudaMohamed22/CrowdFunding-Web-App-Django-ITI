@@ -104,18 +104,6 @@ class Rate(models.Model):
         else:
             return rate
     
-     
-
-# ***************************** Comment **********************
-class Comment(models.Model):
-    comment = models.TextField()
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='comments')
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    def __str__(self):
-        return str(f'comment by {self.user.first_name} {self.user.last_name}  on {self.project.title} project.')
-
 
 # ***************************** Comment **********************
 class Comment(models.Model):

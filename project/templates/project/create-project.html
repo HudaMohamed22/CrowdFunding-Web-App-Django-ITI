@@ -135,23 +135,38 @@
 
   {% block 'JS_attachement' %}
       <script>
-        document.getElementById('projectForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
+          document.getElementById('projectForm').addEventListener('submit', function(event) {
+              event.preventDefault(); 
 
-            // Validate the newTag field using JavaScript
-            const newTagInput = document.getElementById('id_newTag');
-            const newTagError = document.getElementById('newTagError');
-            const newTagValue = newTagInput.value.trim();
+              const newTagInput = document.getElementById('id_newTag');
+              const newTagError = document.getElementById('newTagError');
+              const newTagValue = newTagInput.value.trim();
 
-            // Check if the newTag value matches the regex pattern
-            const pattern = /^[a-zA-Z0-9_]*$/;
-            if (!pattern.test(newTagValue)) {
-                newTagError.textContent = 'Please enter valid tags with letters, digits, or underscores only.';
-                newTagInput.focus();
-            } else {
-                // Submit the form if validation passes
-                this.submit();
-            }
-         });
+              // Split the input value by commas to get an array of tags
+              const tagsArray = newTagValue.split(",");
+
+              // Define a flag to track if any invalid tag is found
+              let hasInvalidTag = false;
+
+              // Iterate over each tag in the tagsArray
+              for (let i = 0; i < tagsArray.length; i++) {
+                if ( tagsArray[i].trim()){
+                  const tag = tagsArray[i].trim();
+
+                  // Check if the tag matches the regex pattern
+                  const pattern = /^[a-zA-Z0-9_]*$/;
+                  if (!pattern.test(tag)) {
+                      newTagError.textContent = 'Please enter valid tags with letters, digits, or underscores only.';
+                      newTagInput.focus();
+                      hasInvalidTag = true;
+                      break; 
+                  }
+                }  
+              }
+              if (!hasInvalidTag) {
+                  this.submit();
+              }
+});
+
       </script>
   {% endblock %}
