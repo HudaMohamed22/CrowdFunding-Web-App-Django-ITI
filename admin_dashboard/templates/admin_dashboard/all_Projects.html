@@ -1,0 +1,82 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+
+{% block 'CSS_attachement' %}
+<link rel="stylesheet" href="{% static 'users/css/viewProj.css' %}">
+<link rel="stylesheet" href="{% static 'css/general_styles.css' %}">
+{% endblock %}
+
+{% block 'page-title' %}
+<title>NileFund - All Projects</title>
+{% endblock %}
+
+{% block 'hero-section-content' %}
+<!-- Start hero section -->
+<section class="d-flex align-items-center justify-content-center" id="hero-section" style="height: 200px; background-image: url('{% static 'homepage/images/header.png' %}'); background-position: center; background-size: cover">
+<div class="container">
+    <div class="d-flex align-items-center justify-content-center">
+        <h2 class="fw-light text-center mb-5"><span class="fw-bold">Projects</span> List</h2>
+    </div>
+</div>
+</section>
+{% endblock %}
+
+{% block 'body-content' %}
+<div class="container my-5">
+    <div class="row flex-wrap">
+        {% for project in projects %}
+        <div class="col-md-3 shadow-sm rounded-3 m-2 proj-item">
+            <div class="mx-auto" style="width: 10rem;">
+                <img src="{{ project.image_url }}" class="img-fluid">
+            </div>
+
+            <div class="">
+                <h3 class="proj-name">{{ project.title }}</h3>
+                <h3 class="proj-goal">Project Target: EGP {{ project.total_target }}.00</h3>
+                <div class="availability">
+                    {% if project.remaining_target <= 0 %}
+                        Fully Funded
+                    {% else %}
+                        Remaining: EGP {{ project.remaining_target }}.00
+                    {% endif %}
+                </div>
+                <span class="proj-text">Start Date: {{ project.start_date }}</span>
+                <span class="proj-text d-block">End Date: {{ project.end_date }}</span>
+                <div class="proj-tags">
+                    Tags:
+                    {% for tag in project.tag.all %}
+                        <span class="tag">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="controllers">
+                {% if user.is_superuser %}
+                    <form id="projectForm{{ project.id }}" method="POST" action="{% url 'mark_featured' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="project_id" value="{{ project.id }}">
+                            <input type="checkbox" class="btn-check" autocomplete="off" id="{{ project.id }}" name="is_featured" {% if project.is_featured %}checked{% endif %} onchange="submitForm({{ project.id }})">
+                            <label class="btn btn-outline-special" for="{{ project.id }}">Featured</label>                    
+                    </form>
+                {% endif %}
+                <a href="#" class="btn btn-secondary d-block my-2">View details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+{% block 'JS_attachement' %}
+<script src="{% static 'js/script.js' %}"></script>
+
+<script>
+    function submitForm(projectId) {
+        const form = document.getElementById('projectForm' + projectId);
+        form.submit();
+    }
+</script>
+{% endblock %}

@@ -19,14 +19,14 @@
         <!-- NavBar -->
         <nav class="navbar navbar-expand-lg rounded-5 mx-5 mt-3 mb-1 shadow-sm">
             <div class="container-fluid px-5">
-            <a class="navbar-brand fw-bold" href="">NileFund<span class="special-color"> .</span></a>
+            <a class="navbar-brand fw-bold" href="{% url 'home.landing' %}">NileFund<span class="special-color"> .</span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">All Projects</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'all_projects' %}">Projects</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Tags</a>
