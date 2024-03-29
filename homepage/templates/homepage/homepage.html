@@ -6,6 +6,20 @@
 
 {% block 'CSS_attachement' %}
 <link rel="stylesheet" href="{% static 'homepage/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/general_styles.css' %}">
+<style>
+    #highest-rated .content::after {
+        content: "";
+        background-color: #000a;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0.7;
+    }
+
+</style>
 {% endblock %}
 
 {% block 'page-title' %}
@@ -63,42 +77,51 @@
 
     <div id="carouselExampleIndicators" class="carousel slide mt-5" data-bs-ride="carousel">
         <div class="carousel-inner">
-        <div class="carousel-item text-center active">
-            <i class="fa-solid fa-4x fa-sheet-plastic"></i>
-            <!-- <img class="d-block mx-auto rounded-pill" src="#"/> -->
-            <h5 class="my-2">Project Name</h5>
-            <p class="mx-auto py-2 my-3 w-75">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Earum officia, ab odio sed quos amet magni vel, sint alias accusantium labore modi reiciendis libero. Et quia vel ad facere provident.
-            </p>
-            <a href="#"class="btn btn-special rounded-5 px-4 py-2">Fund</a>
-        </div>
-        
-        <div class="carousel-item text-center">
-            <i class="fa-solid fa-4x fa-sheet-plastic"></i>
-            <!-- <img class="d-block mx-auto rounded-pill" src="#"/> -->
-            <h5 class="my-2">Project Name</h5>
-            <p class="mx-auto py-2 my-3 w-75">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Numquam fuga nisi aperiam officiis perspiciatis libero eum consequuntur dignissimos illo. Consectetur dicta nesciunt repellat perferendis quasi fuga explicabo, voluptate unde. Quibusdam?
-            </p>
-            <a href="#"class="btn btn-special rounded-5 px-4 py-2 ">Fund</a>
-        </div>
+            {% for project in highest_rated_projects %}
+                <div class="carousel-item {% if forloop.first %} active {% endif %}">
+                    <div class="mx-auto position-relative overflow-hidden rounded-3" style="height: 28rem; width: 55rem;">
+                        <div class="content" style="background-image: url('{{ project.image_url }}'); background-repeat: no-repeat; background-position: center; background-size: cover; height: 28rem; width: 55rem;">
+                        </div>
+                        <!-- <img src="{{ project.image_url }}" class="d-block img-thumbnail w-auto h-100"> -->
+                        
+                        <div class="layer pb-4 start-0 top-0 position-absolute w-auto h-100 d-flex justify-content-end align-items-end text-white">
+                            <div class="row">
+                                <div class="ps-5 col-md-10">
+                                    <h5 class="">{{project.title}}</h5>
+                                    <p class="my-1 w-75">{{project.details}}</p>
+                                    <span class="d-flex align-items-center">
+                                        <p class="fw-semibold m-0">Rating</p>
+                                        {% for star in "*****" %}
+                                            {% if forloop.counter <= project.rate %}
+                                                <i class="fas fa-star text-warning"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </span>
+                                </div>
+                                <div class="col-md-2 mb-3 align-self-end">
+                                    <a href="#"class="btn btn-special rounded-5 px-4 py-2">Fund</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
 
+
         <div class="carousel-indicators position-static mt-3">
-        <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="0"
-            class="active"
-            aria-current="true"
-            aria-label="Slide 1"
-        ></button>
-        <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="1"
-            aria-label="Slide 2"
-        ></button>
+            {% for project in highest_rated_projects %}
+                <button 
+                    type="button" 
+                    data-bs-target="#carouselExampleIndicators" 
+                    data-bs-slide-to="{{ forloop.counter0 }}" 
+                    {% if forloop.first %} class="active" {% endif %}
+                    aria-label="Slide {{ forloop.counter }}"
+                    {% if forloop.first %} aria-current="true" {% endif %}
+                ></button>
+            {% endfor %}
         </div>
     </div>
     </div>
@@ -112,8 +135,10 @@
         <div class="row">
             {% for project in latest_featured_projects %}
             <div class="col-sm-6 col-lg-4 col-xl-3 mb-5">
-                <div class="card rounded-4 border-0 shadow-sm p-3 position-relative">
-                    <img src="{{ project.image_url }}" class="img-fluid rounded-3" alt="Project Image">
+                <div class="card rounded-4 border-0 shadow-sm p-3 position-relative" style="height: 30rem;">
+                    <div class="img-container" style="height: 10rem;">
+                        <img src="{{ project.image_url }}" class="d-block mx-auto img-fluid rounded-3 w-auto h-100" alt="Project Image">
+                    </div>
                     <div class="card-body p-0">          
                         <div class="card-text">
                             <div class="d-flex justify-content-between my-3">
@@ -147,8 +172,10 @@
         <div class="row">
             {% for project in latest_created_projects %}
             <div class="col-sm-6 col-lg-4 col-xl-3 mb-5">
-                <div class="card rounded-4 border-0 shadow-sm p-3 position-relative">
-                    <img src="{{ project.image_url }}" class="img-fluid rounded-3" alt="Project Image">
+                <div class="card rounded-4 border-0 shadow-sm p-3 position-relative" style="height: 30rem;">
+                    <div class="img-container" style="height: 10rem;">
+                        <img src="{{ project.image_url }}" class="d-block mx-auto img-fluid rounded-3 w-auto h-100" alt="Project Image">
+                    </div>
                     <div class="card-body p-0">          
                         <div class="card-text">
                             <div class="d-flex justify-content-between my-3">
@@ -171,6 +198,62 @@
             </div>
             {% endfor %}
         </div>
+    </div>
+</section>
+
+
+<section id="popular-categories" class="padding-medium">
+    <div class="container py-4">
+        <h2 class="fw-light text-center mb-5"><span class="fw-bold">Popular</span> Categories</h2>
+
+        <div class="row">
+            {% if categories_list|length <= 6 %}
+                {% for category in categories_list %}
+                    <div class="col-md-4">
+                        <div class="bg-gray-color-subtle bg-gray-color-subtle:hover rounded-3 p-4 my-3">
+                            <a href="{% url 'category_projects' category.id %}" class="link-underline link-underline-opacity-0">
+                                <div class="d-flex align-items-center justify-content-center">
+                                <div class="ps-4 text-center">
+                                    <p class="category-paragraph fw-bold text-uppercase my-2">{{category.name}}</p>
+                                    <p>{{category.num_projects}} Projects</p>
+                                </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                {% for category in categories_list %}
+                    {% if forloop.counter <= 5 %}
+                    <div class="col-md-4">
+                        <div class="bg-gray-color-subtle bg-gray-color-subtle:hover rounded-3 p-4 my-3">
+                            <a href="{% url 'category_projects' category.id %}" class="link-underline link-underline-opacity-0">
+                                <div class="d-flex align-items-center justify-content-center">
+                                <div class="ps-4 text-center">
+                                    <p class="category-paragraph fw-bold text-uppercase my-2">{{category.name}}</p>
+                                    <p>{{category.num_projects}} Projects</p>
+                                </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                {% if categories_list|length > 6 %}
+                <div class="col-md-4">
+                    <div class="bg-gray-color-subtle bg-gray-color-subtle:hover rounded-3 p-4 my-5">
+                        <a href="{% url 'all_categories' %}" class="link-underline link-underline-opacity-0">
+                            <div class="d-flex align-items-center justify-content-center">
+                            <div class="ps-4">
+                                <p class="category-paragraph fw-bold text-uppercase m-0">View All</p>
+                            </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            {% endif %}
+            </div>
     </div>
 </section>
 

@@ -1,5 +1,6 @@
 from django.shortcuts import render,get_object_or_404
 from homepage.forms import SearchForm
+from django.db.models import Avg, Count
 from project.models import Project, Tag,Category
 
 # Create your views here.
@@ -7,9 +8,14 @@ from project.models import Project, Tag,Category
 def landing(request):
     latest_featured_projects = Project.objects.filter(is_featured=True).order_by('-featured_at')[:5]
     latest_created_projects = Project.objects.order_by('-created_at')[:5]
+    highest_rated_projects = Project.objects.annotate(avg_rate=Avg('rate')).order_by('-avg_rate')[:5]
+    categories = Category.get_all_categories()
+    categories_with_projects_count = Category.objects.annotate(num_projects=Count('projects'))
     return render(request, "homepage/homepage.html", {
         'latest_featured_projects': latest_featured_projects,
-        'latest_created_projects': latest_created_projects
+        'latest_created_projects': latest_created_projects,
+        'highest_rated_projects': highest_rated_projects,
+        'categories_list': categories_with_projects_count
     })
 
 
