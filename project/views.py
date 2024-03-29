@@ -99,6 +99,9 @@ def project_details(request, id):
     target_threshold = project.total_target * 0.25
     reportsNumber = project.Project_Reports.all().count() 
     report_project_Form = ProjectReport_ModelForm()
+
+    # Find other projects with at least one common tag
+    similar_projects = Project.objects.filter(tag__in=tags).exclude(id=project.id).distinct()[:4]
     
     if total_rate is not None and rate_count is not None and rate_count != 0:
         average_rating = total_rate / rate_count
@@ -134,7 +137,8 @@ def project_details(request, id):
         'target_threshold': target_threshold,
         "reportsNumber":reportsNumber,
         "report_project_Form":report_project_Form,
-        "rate_by_user": rate_by_user
+        "rate_by_user": rate_by_user,
+        "similar_projects":similar_projects
     }
 
     return render(request, "project/project_details.html", context)
