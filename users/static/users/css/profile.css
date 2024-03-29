@@ -10,19 +10,29 @@
   color: #f1182d;
 }
 
+.messages.error {
+  background-color: transparent;
+  color: red;
+}
+
+.messages.success {
+  background-color: transparent;
+  color: green;
+}
+
 .main-body {
   padding: 15px;
 }
 
-.mt-10 {
+.mt--10 {
   margin-top: 10px;
 }
 
-.mt-50 {
+.mt--50 {
   margin-top: 50px;
 }
 
-.mt-5 {
+.mb--5 {
   margin-bottom: 100px;
 }
 
@@ -42,9 +52,9 @@
   box-shadow: none !important;
 }
 
-.container {
+.containerr {
   width: 70%;
-  margin: auto;
+  margin-left: 130px;
 }
 
 .info {
@@ -69,7 +79,7 @@
   width: 70%;
 }
 
-.row {
+.rowD {
   display: flex;
 }
 
@@ -92,8 +102,7 @@
   width: 80%;
 }
 
-
-.btn {
+.butn {
   width: 150px;
   height: 50px;
   border-radius: 15px;
@@ -107,21 +116,21 @@
   transition: box-shadow 0.3s ease;
 }
 
-.btn:hover {
+.butn:hover {
   box-shadow: 0 0 20px rgba(236, 108, 90, 0.8);
 }
 
-.btn a {
+.butn a {
   color: white;
   font-weight: bold;
   text-decoration: none;
 }
 
-.btn:hover {
+.butn:hover {
   color: #e2e8f0;
 }
 
-.btn2 {
+.butn2 {
   width: 150px;
   height: 50px;
   border-radius: 15px;
@@ -135,7 +144,7 @@
   transition: box-shadow 0.3s ease;
 }
 
-.btn2:hover {
+.butn2:hover {
   box-shadow: 0 0 20px rgba(236, 108, 90, 0.8);
   color: #e2e8f0;
 }
@@ -146,37 +155,6 @@ input {
   padding: 10px;
 }
 
-.sidebar {
-  margin: 0;
-  padding: 0;
-  width: 200px;
-  background-color: #f1f1f1;
-  position: fixed;
-  height: 100%;
-  overflow: auto;
-}
-
-/* Sidebar links */
-.sidebar a {
-  display: block;
-  color: black;
-  padding: 16px;
-  text-decoration: none;
-}
-
-/* Active/current link */
-.sidebar a.active {
-  color: rgb(150, 121, 121);
-  display: block;
-  color: black;
-}
-
-/* Links on mouse-over */
-.sidebar a:hover:not(.active) {
-  border: solid white;
-  color: rgb(21, 21, 21);
-}
-
 .bigCont {
   display: flex;
 }
@@ -184,8 +162,9 @@ input {
 .sidebar2 {
   margin: 0;
   padding: 0;
-  width: 220px;
-  background-color: #f1f1f1;
+  width: 200px;
+  background-color: #f3d6d6;
+  border-radius: 20px;
   margin-top: 50px;
   height: 560px;
   overflow: auto;
@@ -193,6 +172,7 @@ input {
 
 /* Sidebar links */
 .sidebar2 a {
+  font-weight: bold;
   display: block;
   color: black;
   padding: 16px;
@@ -201,7 +181,7 @@ input {
 
 /* Active/current link */
 .sidebar2 a.active {
-  color: rgb(150, 121, 121);
+  color: rgba(236, 108, 90, 0.8);
   display: block;
   color: black;
 }
@@ -209,7 +189,7 @@ input {
 /* Links on mouse-over */
 .sidebar2 a:hover:not(.active) {
   border: solid white;
-  color: rgb(21, 21, 21);
+  color: rgba(255, 89, 67, 0.8);
 }
 
 /* Modal */
@@ -230,17 +210,20 @@ input {
   margin: 10% auto;
   padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 10px;
   max-width: 500px;
   width: 80%;
 }
 
 .close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
+  position: relative;
+  color: #f08787;
+  left: 440px;
+  top: -10px;
+  font-size: 30px;
   font-weight: bold;
   cursor: pointer;
+
 }
 
 .close:hover,
@@ -266,8 +249,8 @@ input {
   border-radius: 5px;
 }
 
-.btn,
-.btn2 {
+.butn,
+.butn2 {
   padding: 10px 20px;
   font-size: 16px;
   border: none;
@@ -275,17 +258,17 @@ input {
   cursor: pointer;
 }
 
-.btn-danger {
+.butn-danger {
   background-color: #dc3545;
   color: #fff;
 }
 
-.btn-danger:hover {
+.butn-danger:hover {
   background-color: #c82333;
 }
 
 /* Deactivated button style */
-.btn-deactivate {
+.butn-deactivate {
   background-color: #f5f5f5;
   color: #666;
 
@@ -294,22 +277,21 @@ input {
 }
 
 /* Deactivated button hover style */
-.btn-deactivate:hover {
+.butn-deactivate:hover {
   background-color: #e5e5e5;
   color: #a51111;
 }
 
-.btn-container {
+.butn-container {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
 
-.close {
-  display: none;
-  /* Hide the close button by default */
-}
-
 .s-input {
   width: 470px;
+}
+
+.confirm-button {
+  margin-left: 2px;
 }

@@ -44,7 +44,9 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
-
+.btn-secondary{
+    padding: 8px 20px;
+}
 .btn-submit:hover {
     background-color: #dc6630;
 }
@@ -73,4 +75,19 @@ input {
 .alert-danger {
     font-weight: bold;
     color: #f1182d;
+}
+.alert-error {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-success {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
 }
