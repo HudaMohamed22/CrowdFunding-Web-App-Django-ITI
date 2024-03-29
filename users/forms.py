@@ -116,9 +116,20 @@ class UserProfileForm(forms.ModelForm):
                 raise ValidationError('Invalid Facebook URL')
         return facebook_profile
 
-
-    
 class ChangePasswordForm(forms.Form):
-    current_password = forms.CharField(widget=forms.PasswordInput)
-    new_password = forms.CharField(widget=forms.PasswordInput)
-    confirm_password = forms.CharField(widget=forms.PasswordInput)
+    current_password = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete': 'off'}))
+    new_password = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete': 'off'}))
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete': 'off'}))
+
+    def clean_new_password(self):
+        new_password = self.cleaned_data.get('new_password')
+        if len(new_password) < 8:
+            raise forms.ValidationError("Password must be at least 8 characters long.")
+        return new_password
+
+    def clean_confirm_password(self):
+        new_password = self.cleaned_data.get('new_password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+        if new_password != confirm_password:
+            raise forms.ValidationError("Passwords do not match.")
+        return confirm_password

@@ -1,46 +1,35 @@
+{% extends 'layouts/base.html' %}
+
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script>
+{% block 'CSS_attachement' %}
+<link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'homepage/css/style.css' %}">
+{% endblock %}
 
-        function confirmDelete() {
-            if (confirm("Are you sure you want to delete your account?")) {
-                document.getElementById("deleteAccountModal").style.display = 'block'; //confirms? display modal
-            }
-        }
-
-        function closeModal() {
-            document.getElementById("deleteAccountModal").style.display = "none";
-        }
-
-    </script>
-</head>
+{% block 'page-title' %}
+<title>User Profile</title>
+{% endblock %}
+{% block 'body-content' %}
 
 <body>
-    <h1>User Profile</h1>
     <div class="bigCont">
-        <div class="sidebar">
+        <div class="sidebar2">
             <a href="{% url 'view.projects' %}">View Projects</a>
             <a href="#">View Donations</a>
         </div>
-        <div class="container">
-            <div class="row mt-50">
+        <div class="containerr">
+            <div class="rowD mt--50">
                 <div class="info">
                     <img src="{{ user.customuser.profile_picture.url }}" alt="Profile Picture">
-                    <h1 class='mt-10'>{{ user.first_name }}</h1>
-                    <h5 class='mt-5'>{{ user.last_name}}</h5>
+                    <h1 class='mt--10'>{{ user.first_name }}</h1>
+                    <h5 class='mb--5'>{{ user.last_name}}</h5>
                 </div>
                 <div class="details">
+
                     <div class="item d-flex">
                         <div class="title">
-                            <i class="fa fa-user-circle-o" aria-hidden="true"></i> Full Name:
+                            <i class="fa-solid fa-user"></i> Full Name:
                         </div>
                         <div class="boody">
                             {{ user.first_name }} {{ user.last_name }}
@@ -49,7 +38,7 @@
                     <hr>
                     <div class="item d-flex">
                         <div class="title">
-                            <i class="fa fa-envelope-o" aria-hidden="true"></i> Email:
+                            <i class="fa-regular fa-envelope"></i> Email:
                         </div>
                         <div class="boody">
                             {{ user.username }}
@@ -67,7 +56,7 @@
                     <hr>
                     <div class="item d-flex">
                         <div class="title">
-                            <i class="fa fa-calendar" aria-hidden="true"></i> Birthdate:
+                            <i class="fa-regular fa-calendar-days"></i> Birthdate:
                         </div>
                         <div class="boody">
                             {{ user.customuser.birthdate }}
@@ -76,7 +65,7 @@
                     <hr>
                     <div class="item d-flex">
                         <div class="title">
-                            <i class="fa fa-facebook-official" aria-hidden="true"></i> Facebook Profile:
+                            <i class="fa-brands fa-square-facebook"></i> Facebook Profile:
                         </div>
                         <div class="boody">
                             {{ user.customuser.facebook_profile }}
@@ -92,10 +81,10 @@
                         </div>
                     </div>
                     <hr>
-                    <button class='btn'>
+                    <button class='butn'>
                         <a href="{% url 'edit.profile' %}">Edit Profile</a>
                     </button>
-                    <button onclick="confirmDelete()" class="btn2 btn-deactivate">Delete Account</button>
+                    <button onclick="confirmDelete()" class="butn2 butn-deactivate">Delete Account</button>
 
                     {% if messages %}
                     <ul class="messages">
@@ -104,23 +93,25 @@
                         {% endfor %}
                     </ul>
                     {% endif %}
-
                     <!-- Delete account modal -->
                     <div id="deleteAccountModal" class="modal">
                         <div class="modal-content">
-                            <span class="close">&times;</span>
+                            <span class="close" onclick="closeModal()">&times;</span>
                             <h2>Confirm Account Deletion</h2>
+                            <div class="messages">
+                                <!-- messages will be displayed here -->
+                            </div>
                             <form id="delete-account-form" method="post" action="{% url 'delete.account' %}">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="password">Enter your password to confirm deletion:</label>
                                     <br><br>
-                                    <input type="password" class="form-control s-input" id="password" name="password">
+                                    <input type="password" class="form-control s-input" id="password" name="password" autocomplete="off">
                                 </div>
-                                <div class="btn-container">
-                                    <button type="submit" class="btn btn-deactivate">Confirm</button>
-                                    <button type="button" class="btn" onclick="closeModal()">Cancel</button>
-                                </div>
+                                <!-- <div class="butn-container"> -->
+                                    <button type="submit" class="butn2 butn-deactivate confirm-button">Confirm</button>
+                                    <!-- <button type="button" class="butn" onclick="closeModal()">Cancel</button> -->
+                                <!-- </div> -->
                             </form>
                         </div>
                     </div>
@@ -129,4 +120,61 @@
         </div>
     </div>
 </body>
+{% endblock %}
+{% block 'JS_attachement' %}
+<script>
+
+    function confirmDelete() {
+        if (confirm("Are you sure you want to delete your account?")) {
+            document.getElementById("password").value = "";
+            document.getElementById("deleteAccountModal").style.display = 'block'; //confirms? display modal
+        }
+    }
+
+    function closeModal() {
+        // clear the password input field
+        document.getElementById("password").value = "";
+        // clear any messages
+        var messagesContainer = document.querySelector('.modal-content .messages');
+        messagesContainer.innerHTML = '';
+        // close the modal
+        document.getElementById("deleteAccountModal").style.display = "none";
+    }
+
+    document.getElementById("delete-account-form").addEventListener("submit", function (event) {
+    event.preventDefault(); // prevent the form from submitting normally
+
+    // serialize form data
+    var formData = new FormData(this);
+
+    // send form data using fetch
+    fetch(this.action, {
+        method: this.method,
+        body: formData,
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            var messageContainer = document.querySelector('.modal-content .messages');
+            messageContainer.innerHTML = data.message;
+            messageContainer.className = data.success ? 'messages success' : 'messages error';
+            if (data.success) {
+                setTimeout(function () {
+                    window.location.href = "{% url 'home.landing' %}"; 
+                    closeModal();
+                }, 1500); // redirect after a delay
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+
+
+</script>
+
+{% endblock %}
+
 </html>

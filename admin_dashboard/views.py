@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from project.forms import Category_ModelForm
 from project.models import Category, Project
 from django.http import JsonResponse
-
+from django.utils import timezone
 
 # Create your views here.
 
@@ -57,3 +57,24 @@ def category_projects(request, category_id):
     category_projects = Project.objects.filter(category_id=category_id)
     # category_projects = Project.objects.filter(category_id=category_id, owner_id=request.user.id)
     return render(request, 'admin_dashboard/category_projects.html', {'category_projects': category_projects, 'selected_category':selected_category})
+
+def show_projects(request):
+    projects = Project.objects.all()
+    return render(request, "admin_dashboard/all_Projects.html", {'projects': projects})
+
+
+def mark_featured(request):
+    if request.method == 'POST':
+        project_id = request.POST.get('project_id')
+        is_featured = request.POST.get('is_featured')
+        try:
+            project = Project.objects.get(pk=project_id)
+            project.is_featured = is_featured == 'on'
+            if project.is_featured:
+                project.featured_at = timezone.now()  # set featured_at to current date and time
+            project.save()
+            return redirect('all_projects')
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return redirect('all_projects')
+
