@@ -89,15 +89,12 @@ def project_details(request, id):
     image_urls = project.get_image_urls()
     comments= project.comments.all()
     counter = list(range(len(image_urls)-1))
-    # *noooooooooooooooooooooooooooooote* must be related to specific project not all Donation objects 
-    # or you can replace it by project.current_donation field *it suppose to be the total donation amout of a project* it must be handle in donation function 
     # another nooote i used the project.current_donation  in my conditions supposing you noran will handle it in the user donation function  
-    total_donation = Donation.objects.aggregate(total=Sum('donation'))['total']
-    donation_count = Donation.objects.aggregate(count=Count('id'))['count']
+    total_donation =  project.donations.aggregate(total=Sum('donation'))['total'] or 0
+    donation_count =  project.donations.aggregate(count=Count('id'))['count'] or 0
 
-     # *noooooooooooooooooooooooooooooote* must be related to specific project not all Donation objects
-    total_rate = Rate.objects.aggregate(total=Sum('rate'))['total']
-    rate_count = Rate.objects.aggregate(count=Count('rate'))['count']
+    total_rate = project.rates.aggregate(total=Sum('rate'))['total'] or 0
+    rate_count = project.rates.aggregate(count=Count('rate'))['count'] or 0
     if total_rate is not None and rate_count is not None and rate_count != 0:
         average_rating = total_rate / rate_count
     else:
