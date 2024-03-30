@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from users.forms import  RegisterModelForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
@@ -152,19 +152,17 @@ def change_password(request):
 @login_required
 def delete_account(request):
     if request.method == 'POST':
-        # getting the password from the form
         password = request.POST.get('password')
         user = authenticate(username=request.user.username, password=password)
 
         if user is not None:
             user.delete()
-            messages.success(request, 'Your account has been successfully deleted.')
-            return redirect('home.landing')
+            return JsonResponse({'success': True, 'message': 'Your account has been successfully deleted.'})
         else:
-            messages.error(request, 'Wrong password!')
-            
-    return redirect('profile')  
+            return JsonResponse({'success': False, 'message': 'Wrong password!'})
 
+    # if the request method is not POST
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
 def view_projects(request):
   
