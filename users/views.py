@@ -14,8 +14,7 @@ from users.forms import UserProfileForm
 from .forms import UserProfileForm, ChangePasswordForm
 from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseServerError
-from project.models import Project
-from django.http import JsonResponse
+from project.models import Project, Donation
 
 def activateEmail(request, user, to_email):
     mail_subject = "NileFund Account Activation."
@@ -90,7 +89,7 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    url = reverse('home.landing')
+    url = reverse('login')
     return redirect(url)
 
 def view_profile(request):
@@ -149,35 +148,22 @@ def change_password(request):
         return render(request, 'users/change_password.html', {'form': form})
     except Exception as e:
         return HttpResponseServerError("An error occurred: {}".format(str(e)))
-# @login_required
-# def delete_account(request):
-#     if request.method == 'POST':
-#         # getting the password from the form
-#         password = request.POST.get('password')
-#         user = authenticate(username=request.user.username, password=password)
-
-#         if user is not None:
-#             user.delete()
-#             return redirect('home.landing')
-#         else:
-#             messages.error(request, 'Wrong password!')
-            
-#     return redirect('profile')  
-
+    
 @login_required
 def delete_account(request):
     if request.method == 'POST':
+        # getting the password from the form
         password = request.POST.get('password')
         user = authenticate(username=request.user.username, password=password)
 
         if user is not None:
             user.delete()
-            return JsonResponse({'success': True, 'message': 'Your account has been successfully deleted.'})
+            messages.success(request, 'Your account has been successfully deleted.')
+            return redirect('home.landing')
         else:
-            return JsonResponse({'success': False, 'message': 'Wrong password!'})
-
-    # if the request method is not POST
-    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+            messages.error(request, 'Wrong password!')
+            
+    return redirect('profile')  
 
 
 def view_projects(request):
@@ -189,3 +175,10 @@ def view_projects(request):
 
     # pass the projects to the template context
     return render(request, 'users/view_projects.html', {'user_projects': user_projects})
+
+
+def view_donations(request):
+    user_donations = Donation.objects.filter(user=request.user)
+
+    # pass the user's donations to the template context
+    return render(request, 'users/view_donations.html', {'user_donations': user_donations})
