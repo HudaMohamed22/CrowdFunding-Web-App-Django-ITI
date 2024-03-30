@@ -251,10 +251,13 @@ def check_if_rating_exists(request,project, user, rating):
     existing_rating = Rate.objects.filter(project=project, user=user).first()
 
     if existing_rating:
+        print(f"user rated before with {existing_rating.rate}")
         existing_rating.rate = int(rating)
         existing_rating.save()
+        print(f"user new rating is {existing_rating.rate}")
     else:
-       rate = Rate.create_rate(rate_value=rating, project_instance=project, user_instance=user)
+       print("rate created with rate " + rating)
+       rate = Rate.create_rate(rate_value=int(rating), project_instance=project, user_instance=user)
 
        if rate:
             messages.success(request, f'Thank you for rating "{project.title}" with a rating of {rating}!')
