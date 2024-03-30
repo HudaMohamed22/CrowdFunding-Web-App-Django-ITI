@@ -105,7 +105,7 @@ def view_profile(request):
             return redirect('login')
     except Exception as e:
         return HttpResponseServerError("An error occurred: {}".format(str(e)))
-    
+@login_required(login_url='login')    
 def edit_profile(request):
     custom_user = request.user.customuser
     if request.method == 'POST':
@@ -117,6 +117,7 @@ def edit_profile(request):
         user_form = UserProfileForm(instance=custom_user)
     return render(request, 'users/edit_profile.html', {'user_form': user_form})
 
+@login_required(login_url='login')  
 def change_password(request):
     try:
         if request.method == 'POST':
@@ -149,7 +150,7 @@ def change_password(request):
     except Exception as e:
         return HttpResponseServerError("An error occurred: {}".format(str(e)))
     
-@login_required
+@login_required(login_url='login')
 def delete_account(request):
     if request.method == 'POST':
         password = request.POST.get('password')
@@ -164,6 +165,7 @@ def delete_account(request):
     # if the request method is not POST
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
+@login_required(login_url='login')
 def view_projects(request):
   
     user_projects = Project.objects.filter(owner=request.user)
@@ -174,7 +176,7 @@ def view_projects(request):
     # pass the projects to the template context
     return render(request, 'users/view_projects.html', {'user_projects': user_projects})
 
-
+@login_required(login_url='login')
 def view_donations(request):
     user_donations = Donation.objects.filter(user=request.user)
 

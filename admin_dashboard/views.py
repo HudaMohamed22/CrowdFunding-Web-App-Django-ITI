@@ -9,12 +9,12 @@ from .decorators import admin_required
 
 # Create your views here.
 
-@login_required
+@login_required(login_url='login')
 @admin_required
 def landing(request):
     return render(request, "admin_dashboard/dashboard.html")
 
-@login_required
+@login_required(login_url='login')
 @admin_required
 def create_new_category(request):
     form = Category_ModelForm()
@@ -36,7 +36,7 @@ def show_categories(request):
     categories = Category.get_all_categories()
     return render(request, 'admin_dashboard/all_categories.html', {'categories': categories})
 
-@login_required
+@login_required(login_url='login')
 @admin_required
 def edit_specific_category(request, category_id):
     selected_category = Category.get_category_by_id(category_id)
@@ -49,7 +49,7 @@ def edit_specific_category(request, category_id):
     return render(request, 'admin_dashboard/edit_category.html', context={"categoryForm": form})
 
 
-@login_required
+@login_required(login_url='login')
 @admin_required
 def delete_specific_category(request, category_id):
     deleted_category = Category.objects.get(id=category_id)
@@ -57,7 +57,7 @@ def delete_specific_category(request, category_id):
     url = reverse('all_categories')
     return redirect(url)
 
-@login_required
+@login_required(login_url='login')
 def category_projects(request, category_id):
     selected_category = Category.get_category_by_id(category_id)
     if not request.user.is_superuser:
@@ -70,7 +70,7 @@ def show_projects(request):
     projects = Project.objects.all()
     return render(request, "admin_dashboard/all_Projects.html", {'projects': projects})
 
-@login_required
+@login_required(login_url='login')
 @admin_required
 def mark_featured(request):
     if request.method == 'POST':
