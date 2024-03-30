@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 class RegisterModelForm(UserCreationForm):
     class Meta:
         model  = CustomUser
-        fields= ['first_name', 'last_name', 'username', 'password1','password2','mobile_phone','profile_picture']
+        fields= ['username','first_name', 'last_name', 'password1','password2','mobile_phone','profile_picture']
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
