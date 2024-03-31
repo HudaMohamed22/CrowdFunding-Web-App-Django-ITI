@@ -21,7 +21,7 @@
 </a>
 
 ### Admin Demo
-![Admin Demo](https://github.com/HudaMohamed22/CrowdFunding-Web-App-Django-ITI/assets/76265525/f631c400-8c20-40d9-bdbb-e33db9f17b3c)
+https://github.com/HudaMohamed22/CrowdFunding-Web-App-Django-ITI/assets/76265525/f631c400-8c20-40d9-bdbb-e33db9f17b3c
 
 <h2 id="features">🧐 Features</h2>
 
