@@ -147,13 +147,9 @@ def project_details(request, id):
         return render(request, "404.html")
 
 
-#mehtagen net2aked el far2 benhom 
 @login_required(login_url='login')
-
 def create_comment(request, project_id):
-    if not request.user.is_authenticated :
-        return redirect('login')  
-    else:
+    try:
         user = CustomUser.objects.get(pk=request.user.pk)
         project = Project.objects.get(pk=project_id)
         if request.method == 'POST':
@@ -167,11 +163,12 @@ def create_comment(request, project_id):
                 return redirect('project_details', project_id)
 
         return render(request, "project/project_details.html", context={"user": user, "project": project})
+    except Exception as e:
+        return render(request, "404.html")
 
+@login_required(login_url='login')
 def add_donations(request, project_id):
-    if not request.user.is_authenticated :
-        return redirect('login')  
-    else:
+    try:
         user = CustomUser.objects.get(pk=request.user.pk)
         project = Project.objects.get(pk=project_id)
         error_message = None 
@@ -192,6 +189,8 @@ def add_donations(request, project_id):
                             project.save()
                 return redirect('project_details', project_id)
         return render(request, "project/project_details.html", context={"user": user, "project": project,"error_message": error_message})
+    except Exception as e:
+        return render(request, "404.html")
 
 
 @login_required(login_url='login')        

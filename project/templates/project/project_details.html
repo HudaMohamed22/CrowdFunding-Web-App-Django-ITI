@@ -89,11 +89,9 @@
                                     {% for comment in comments %}
                                     <li class="">
                                         <div class="comment d-flex">
+                                            <img src="{{ comment.user.profile_picture_url }}" alt="{{ comment.user.first_name }}'s photo" class="rounded-circle" width="50" height="50">
                                             <div class="col-md-8 mx-3">
-                                                <h6 class="comment-header mb-0 d-flex">
-                                                    {{ comment.user|title }}
-                                                </h6>
-                                                                        
+                                                <h6 class="comment-header mb-0">{{ comment.user.first_name }} {{ comment.user.last_name }}</h6>                  
                                                 <p class="comment-time">
                                                     <small><small>{{ comment.created_at }}</small></small>
                                                 </p>
@@ -111,7 +109,7 @@
                                     {% else %}
                                     <li>No comments yet.</li>
                                     {% endif %}
-                                    <hr />
+                                 
                                     <form class="d-flex flex-column align-items-end" method="post"
                                         action="{% url 'create_comment' project.id %}">
                                         {% csrf_token %}
@@ -195,15 +193,11 @@
                     <span>Donations</span>
                 </div>
                 <div class="d-flex flex-column align-items-center">
-                    <span>{{ average_rating|floatformat:1 }}</span>
-                    <span class="rating d-flex align-items-center mt-3">
-                        {% for star_num in '12345' %}
-                        {% if star_num|add:0 <= average_rating%} <i class="fa-solid fa-star text-warning"></i>
-                            {% else %}
-                            <i class="fa-regular fa-star"></i>
-                            {% endif %}
-                            {% endfor %}
-                    </span>
+                    <div>
+                        <span>{{ average_rating|floatformat:1 }}</span>
+                        <i class="fa-solid fa-star text-warning"></i>
+                    </div>
+                    <span class="rating d-flex align-items-center">Ratings</span>
                 </div>
                 <div class="d-flex flex-column align-items-center">
                     {% if days_left <= 0 %} <span> 0 </span>
