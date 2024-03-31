@@ -176,7 +176,7 @@
         <div class="row">
             {% for project in latest_created_projects %}
             <div class="col-sm-6 col-lg-4 col-xl-3 mb-5">
-                <div class="card rounded-4 border-0 shadow-sm p-3 position-relative" style="height: 30rem;">
+                <div class="card rounded-4 border-0 shadow-sm p-3 position-relative" style="height: 20rem;">
                     <div class="img-container" style="height: 10rem;">
                         <img src="{{ project.image_url }}" class="d-block mx-auto img-fluid rounded-3 w-auto h-100" alt="Project Image">
                     </div>
@@ -185,7 +185,7 @@
                             <div class="d-flex justify-content-between my-3">
                                 <h5 class="text-black-50 fw-bold text-uppercase m-0">{{ project.title }}</h5>
                             </div>
-                            {% comment %} <p class="course-title py-2 m-0">{{ project.details }}</p> {% endcomment %}
+                            <!-- <p class="course-title py-2 m-0">{{ project.details }}</p> -->
                             <span class="rating d-flex align-items-center mt-3">
                                 <p class="text-muted fw-semibold m-0 me-2">Rating</p>
                                 {% for star in "*****" %}
@@ -197,10 +197,12 @@
                                 {% endfor %}
                             </span>
                         </div>
+                        <br>
+                        {% if not user.is_superuser %}
+                        <a href="{% url 'project_details' id=project.id %}" class="btn btn-secondary d-block my-2">View details</a>
+                       {% endif %}
                     </div>
-                    {% if not user.is_superuser %}
-                    <a href="{% url 'project_details' id=project.id %}" class="btn btn-secondary d-block my-2">View details</a>
-                    {% endif %}
+                    
                 </div>
             </div>
             {% endfor %}
