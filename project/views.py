@@ -9,6 +9,7 @@ from users.models import CustomUser
 from django.contrib import messages #import messages
 import re
 from django.db.models import Sum, Count
+from django.http import Http404
 from datetime import date, datetime
 
 @login_required(login_url='login')
@@ -241,29 +242,34 @@ def is_spam_comment(user_id, comment_id):
 
 @login_required(login_url='login')
 def rate_project(request, id):
+    try:
         if request.method == "POST":
             project = get_object_or_404(Project, pk=id)
             rate = request.POST.get('rate', 'empty')
             if rate.isnumeric():
-                 customuser=CustomUser.objects.get(pk=request.user.pk)
+                 customuser=get_object_or_404(CustomUser,pk=request.user.pk)
                  check_if_rating_exists(request,project, customuser, rate)
 
         return redirect('project_details', id)
+    except Http404:
+        return render(request, "404.html")
+    except Exception as e:
+       print(e)
+       return HttpResponse("We apologize but something went wrong") 
 
 
-def check_if_rating_exists(request,project, user, rating):
-    existing_rating = Rate.objects.filter(project=project, user=user).first()
+def check_if_rating_exists(project, user, rating):
+    try:
+        existing_rating = Rate.objects.filter(project=project, user=user).first()
 
-    if existing_rating:
-        print(f"user rated before with {existing_rating.rate}")
-        existing_rating.rate = int(rating)
-        existing_rating.save()
-        print(f"user new rating is {existing_rating.rate}")
-    else:
-       print("rate created with rate " + rating)
-       rate = Rate.create_rate(rate_value=int(rating), project_instance=project, user_instance=user)
-
-       if rate:
-            messages.success(request, f'Thank you for rating "{project.title}" with a rating of {rating}!')
-       else:
-            messages.error(request, 'Failed to add rate.')
+        if existing_rating:
+            print(f"user rated before with {existing_rating.rate}")
+            existing_rating.rate = int(rating)
+            existing_rating.save()
+            print(f"user new rating is {existing_rating.rate}")
+        else:
+            Rate.create_rate(rate_value=int(rating), project_instance=project, user_instance=user)
+            print("rate created with rate " + rating)
+    except Exception as e:
+        print(e)
+        return HttpResponse("We apologize but something went wrong during rating this project")
