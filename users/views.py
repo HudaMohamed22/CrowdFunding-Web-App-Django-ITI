@@ -27,9 +27,9 @@ def activateEmail(request, user, to_email):
     })
     email = EmailMessage(mail_subject, message, to=[to_email])
     if email.send():
-        messages.success(request, 'Account created successfully. Please check your email to activate your account to be able to login.')
+        messages.success(request, 'Account created successfully. Please check your email to activate your account to be able to login.', extra_tags='register')
     else:
-        messages.error(request, f'Problem sending email to {to_email}, check if you typed it correctly.')
+        messages.error(request, f'Problem sending email to {to_email}, check if you typed it correctly.', extra_tags='register')
 
 
 def activate(request, uidb64, token):
@@ -43,7 +43,7 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
+        messages.success(request, "Thank you for your email confirmation. Now you can login to your account." , extra_tags='login')
         url = reverse('login')
         return redirect(url)
     else:
@@ -82,7 +82,7 @@ def login_user(request):
                 url = reverse('home.landing')
                 return redirect(url)
             else:
-                messages.error(request,'incorrect email or password')
+                messages.error(request,'incorrect email or password', extra_tags='login')
 
         return render(request,'users/login.html')
 
