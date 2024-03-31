@@ -105,6 +105,7 @@ def view_profile(request):
             return redirect('login')
     except Exception as e:
         return HttpResponseServerError("An error occurred: {}".format(str(e)))
+    
 @login_required(login_url='login')    
 def edit_profile(request):
     custom_user = request.user.customuser
@@ -173,12 +174,10 @@ def view_projects(request):
     for project in user_projects: #subtraction process
         project.remaining_target = project.total_target - project.current_donation
 
-    # pass the projects to the template context
     return render(request, 'users/view_projects.html', {'user_projects': user_projects})
 
 @login_required(login_url='login')
 def view_donations(request):
     user_donations = Donation.objects.filter(user=request.user)
 
-    # pass the user's donations to the template context
     return render(request, 'users/view_donations.html', {'user_donations': user_donations})

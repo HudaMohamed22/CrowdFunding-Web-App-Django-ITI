@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password
 from django import forms
 from django.forms import ClearableFileInput
 from django.core.exceptions import ValidationError
+from datetime import date, timedelta
 
 class RegisterModelForm(UserCreationForm):
     class Meta:
@@ -68,7 +69,6 @@ COUNTRY_CHOICES = [
 class UserProfileForm(forms.ModelForm):
     country = forms.ChoiceField(choices=COUNTRY_CHOICES, required=False)
 
-
     class Meta:
         model = CustomUser
         fields = ['first_name', 'last_name', 'mobile_phone', 'profile_picture', 'birthdate', 'facebook_profile', 'country']
@@ -108,7 +108,17 @@ class UserProfileForm(forms.ModelForm):
         if not profile_picture:
             return 'users/images/default_profile_picture.jpg'  # set default picture path
         return profile_picture
+    
+    def clean_birthdate(self):
+        birthdate = self.cleaned_data.get('birthdate')
+        today = date.today()
+        
+        # check if birthdate is after today's date
+        if birthdate > today:
+            raise forms.ValidationError("Birthdate cannot be in the future.")
 
+        return birthdate
+    
     def clean_facebook_profile(self):
         facebook_profile = self.cleaned_data.get('facebook_profile')
         if facebook_profile:
