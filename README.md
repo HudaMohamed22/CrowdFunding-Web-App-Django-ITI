@@ -62,18 +62,20 @@ Technologies used in the project:
 ### Windows:
 
 <p>1. Download or Clone the project</p>
-
+```
+git clone https://github.com/HudaMohamed22/CrowdFunding-Web-App-Django-ITI.git
+```
 <p>2. Install python with V.3+ and MySQL database on your machine</p>
 
 <p>3. Install and activate VirtualEnvironment in the *window* terminal and write the following </p>
-<p>3. Install and activate VirtualEnvironment in the *window* terminal and write the following </p>
+
 
 ```
-- pip install virtualenv        to install virtual environment 
+- pip install virtualenv        #to install virtual environment 
 
 Enter the project folder and write in the terminal 
--  virtualenv .venv                            to create  Venv    
-- .venv\Scripts\activate                       to activate it 
+-  virtualenv .venv                            #to create  Venv    
+- .venv\Scripts\activate                       #to activate it 
 
 ```
 <p>4. Install requiremental packages</p>
@@ -112,14 +114,15 @@ python3 manage.py runserver
 ### Linux:
 
 <p>1. Download or Clone the project</p>
-
+```
+git clone https://github.com/HudaMohamed22/CrowdFunding-Web-App-Django-ITI.git
+```
 <p>2. Install python with V.3+ and MySQL database on your machine</p>
 
 <p>3. Install and activate VirtualEnvironment in the terminal inside the project's directory by writing the following </p>
 
 ```
-python -m venv /path/to/new/virtualenv
-#to create Venv
+python -m venv /path/to/new/virtualenv #to create Venv
 source .venv/bin/activate #to activate it
 ```
 <p>4. Install requiremental packages</p>
