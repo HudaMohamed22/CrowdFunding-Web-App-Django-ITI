@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv  
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,9 +85,9 @@ WSGI_APPLICATION = 'NileFund.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'mysql.connector.django',
-        'NAME': 'crowd_funding',
-        'USER': 'team',
-        'PASSWORD': '123',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST':'127.0.0.1',
         'PORT':'3306'
     }
@@ -140,10 +144,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Emailing settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_FROM = 'nilefund@gmail.com'
-EMAIL_HOST_USER = 'nilefund@gmail.com'
-EMAIL_HOST_PASSWORD = 'vaqkuugoivjbqqce'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_FROM = os.getenv('EMAIL_FROM')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 

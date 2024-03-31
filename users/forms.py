@@ -110,14 +110,13 @@ class UserProfileForm(forms.ModelForm):
         return profile_picture
     
     def clean_birthdate(self):
-        birthdate = self.cleaned_data.get('birthdate')
-        today = date.today()
-        
-        # check if birthdate is after today's date
-        if birthdate > today:
-            raise forms.ValidationError("Birthdate cannot be in the future.")
-
-        return birthdate
+            birthdate = self.cleaned_data.get('birthdate')
+            if birthdate:
+                today = date.today()
+                # check if birthdate is after today's date
+                if birthdate > today:
+                    raise forms.ValidationError("Birthdate cannot be in the future.")
+            return birthdate
     
     def clean_facebook_profile(self):
         facebook_profile = self.cleaned_data.get('facebook_profile')

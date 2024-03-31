@@ -71,8 +71,9 @@ p {
     text-align: center;
     overflow: hidden;
     height: 400px;
-    width: 156.6px;
+    width: 350px;
     border-top: 3px solid #f0f0f0; 
+    margin-bottom: 40px;
 }
 
 .proj-list .cell::before {
@@ -132,15 +133,15 @@ p {
 }
 
 .proj-name {
-    font-size: 15px;
+    font-size: 18px;
     margin: 5px 0;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .proj-goal {
     color: #121212;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 400;
 }
 
 .cell .proj-image-wrapper {
@@ -176,3 +177,7 @@ p {
     padding: 10px;
 }
 
+.proj-info-container .btn-secondary {
+    width: 100%;
+    margin-top: 10px; 
+}
