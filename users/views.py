@@ -15,8 +15,9 @@ from .forms import UserProfileForm, ChangePasswordForm
 from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseServerError
 from project.models import Project, Donation
+from django.utils import timezone
 
-def activateEmail(request, user, to_email):
+def activate_email(request, user, to_email):
     mail_subject = "NileFund Account Activation."
     message = render_to_string("users/activation_email.html", {
         'user': user.first_name,
@@ -63,10 +64,9 @@ def register_user(request):
                 user.is_active = False
                 user.save()
                 # activation function call
-                activateEmail(request, user, form.cleaned_data.get('username'))
+                activate_email(request, user, form.cleaned_data.get('username'))
         return render(request,
                     'users/register.html', {'form': form})
-
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -76,13 +76,28 @@ def login_user(request):
         if request.method=='POST':
             email = request.POST.get('email')
             password = request.POST.get('password')
-            user = authenticate(username=email, password=password)
-            if user is not None:
-                login(request,user)
-                url = reverse('home.landing')
+            User = get_user_model()
+            try:
+                user = User.objects.get(username=email)
+            except User.DoesNotExist:
+                messages.info(request, 'Please register first to be able to login', extra_tags='register')
+                url = reverse('register')
                 return redirect(url)
+            if user.is_active: 
+                    user = authenticate(username=email, password=password)
+                    if user is not None:
+                        login(request,user)
+                        url = reverse('home.landing')
+                        return redirect(url)
+                    else:
+                        messages.error(request,'incorrect email or password', extra_tags='login')
             else:
-                messages.error(request,'incorrect email or password', extra_tags='login')
+                if user.date_joined + timezone.timedelta(days=1) < timezone.now(): # more than one day passed without activation then link expired
+                    #resend activation link
+                    activate_email(request, user, email)
+                    messages.error(request, 'Account activation link expired. Resent activation link, please check your email.', extra_tags='login')
+                else:
+                    messages.error(request, 'Your account is not yet activated. Please check your email for activation instructions.', extra_tags='login')
 
         return render(request,'users/login.html')
 
