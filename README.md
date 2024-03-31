@@ -75,7 +75,7 @@ DB_PASSWORD='Your DB_PASSWORD'
 EMAIL_HOST = ' Your EMAIL_HOST '
 EMAIL_FROM = 'Your EMAIL_FROM '
 EMAIL_HOST_USER = 'Your EMAIL_HOST_USER '
-EMAIL_HOST_PASSWORD = 'YourEMAIL_HOST_PASSWORD  '
+EMAIL_HOST_PASSWORD = 'Your EMAIL_HOST_PASSWORD  '
 ```
 
 <p>7. Run the following to load the project's models into tables in your database</p>
@@ -84,7 +84,7 @@ EMAIL_HOST_PASSWORD = 'YourEMAIL_HOST_PASSWORD  '
 python manage.py makemigrations
 python manage.py migrate
 ```
-<p>7. Finally, Run the Django Server</p>
+<p>8. Finally, Run the Django Server</p>
 
 ```
 python3 manage.py runserver
