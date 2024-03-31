@@ -1,0 +1,59 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block 'CSS_attachement' %}
+<link rel="stylesheet" href="{% static 'css/general_styles.css' %}">
+{% endblock %}
+
+{% block 'page-title' %}
+<title>NileFund - User Donations</title>
+{% endblock %}
+
+{% block 'hero-section-content' %}
+<!-- Start hero section -->
+<section class="d-flex align-items-center justify-content-center" id="hero-section" style="height: 200px; background-image: url('{% static 'homepage/images/header.png' %}'); background-position: center; background-size: cover">
+<div class="container">
+    <div class="d-flex align-items-center justify-content-center">
+        <h2 class="fw-light text-center mb-5"><span class="fw-bold">My Donations</span> List</h2>
+    </div>
+</div>
+</section>
+{% endblock %}
+
+{% block 'body-content' %}
+<div class="container my-5">
+    {% if user_donations %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Donation Amount</th>
+                <th>Project Name</th>
+                <th>Project Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for donation in user_donations %}
+            <tr>
+                <td>{{ donation.donation }}</td>
+                <td>{{ donation.project.title }}</td>
+                <td>
+                <a href="{% url 'project_details' id=donation.project.id %}" class="btn btn-secondary mx-2"><i class="fa-solid fa-eye"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-center">
+            <h2 class="fw-light text-center mb-5 text-warning">No Donations yet!</h2>
+        </div>
+    </div>
+    
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block 'JS_attachement' %}
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock %}

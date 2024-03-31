@@ -1,0 +1,172 @@
+{% extends 'layouts/base.html' %}
+
+{% block 'page-title' %}
+    <title>Create Project</title>
+{% endblock %}
+
+{% block 'CSS_attachement' %}
+    <style>
+      body {
+        background: linear-gradient(to right, #f8f3f0, #f4e0e6);
+      }
+  
+      .form-container {
+        max-width: 700px;
+        margin: 3rem auto;
+        padding: 2rem;
+        border-radius: 10px;
+        border: 1px solid #de6f3c;
+        background-color: #ffffff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+      }
+  
+      .form-label {
+        color: #8f422a;
+        font-weight: bold;
+      }
+  
+      .form-control {
+        border: 1px solid #d9b3a3;
+        border-radius: 5px;
+      }
+  
+      .error-message {
+        color: #ec2027;
+        margin-bottom: 0.5rem;
+      }
+  
+      .mb-3 {
+        margin-bottom: 1rem;
+      }
+  
+      .btn-submit {
+        background-color: #7c2d0b;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+  
+      .btn-submit:hover {
+        background-color: #dc6630;
+      }
+  
+      h2.text-center.mb-3 {
+      color: #7c2d0b; 
+      }
+  
+    </style>
+{% endblock %}
+
+  {% block 'body-content' %}
+
+      <div class="container">
+        <div class="form-container">
+          <form id="projectForm" method="post" autocomplete="off" enctype="multipart/form-data" >
+            {% csrf_token %}
+
+            <h2 class="mb-3 text-center">Create Project</h2>
+
+            <div class="form-group mb-3">
+              <label for="id_title" class="form-label">Project Title*</label>
+              {{ form.title }}
+              <span class="error-message">{{ form.title.errors }}</span>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="id_details" class="form-label">Details*</label>
+              {{ form.details }}
+              <span class="error-message">{{ form.details.errors }}</span>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="id_total_target" class="form-label">Total Target*</label>
+              {{ form.total_target }}
+              <span class="error-message">{{ form.total_target.errors }}</span>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="id_start_date" class="form-label">Start Date</label>
+              {{ form.start_date }}
+              <span class="error-message">{{ form.start_date.errors }}</span>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="id_end_date" class="form-label">End Date*</label>
+              {{ form.end_date }}
+              <span class="error-message">{{ form.end_date.errors }}</span>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="id_category" class="form-label">Category*</label>
+              {{ form.category }}
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="id_newTag" class="form-label">Add Tag</label>
+              <input type="text" class="form-control" id="id_newTag" name="newTag" maxlength="255" placeholder="Enter tags separated by commas">          <span class="error-message">{{ form.tag.errors }}</span>
+              <span class="error-message" id="newTagError"></span>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="id_tag" class="form-label">Tags</label>
+              <select name="tag" id="id_tag" class="form-control" multiple>
+                {% for tag in form.tag.field.queryset %}
+                  <option value="{{ tag.id }}">{{ tag.name }}</option>
+                {% endfor %}
+              </select>
+              <span class="error-message">{{ form.tag.errors }}</span>
+            </div>
+
+            <div class="form-group mb-3">
+              <label style="margin-top: 20px;" for="id_images" class="form-label">Projects Pictures</label>
+              <input type="file" class="form-control" id="id_images" name="images" multiple required >
+            </div>
+
+            <div class="text-center mt-3">
+              <button style="font-size: 20px; font-weight: 400;" type="submit" name="create_project" class="btn btn-submit">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+  {% endblock %}    
+
+
+  {% block 'JS_attachement' %}
+      <script>
+          document.getElementById('projectForm').addEventListener('submit', function(event) {
+              event.preventDefault(); 
+
+              const newTagInput = document.getElementById('id_newTag');
+              const newTagError = document.getElementById('newTagError');
+              const newTagValue = newTagInput.value.trim();
+
+              // Split the input value by commas to get an array of tags
+              const tagsArray = newTagValue.split(",");
+
+              // Define a flag to track if any invalid tag is found
+              let hasInvalidTag = false;
+
+              // Iterate over each tag in the tagsArray
+              for (let i = 0; i < tagsArray.length; i++) {
+                if ( tagsArray[i].trim()){
+                  const tag = tagsArray[i].trim();
+
+                  // Check if the tag matches the regex pattern
+                  const pattern = /^[a-zA-Z0-9_]*$/;
+                  if (!pattern.test(tag)) {
+                      newTagError.textContent = 'Please enter valid tags with letters, digits, or underscores only.';
+                      newTagInput.focus();
+                      hasInvalidTag = true;
+                      break; 
+                  }
+                }  
+              }
+              if (!hasInvalidTag) {
+                  this.submit();
+              }
+});
+
+      </script>
+  {% endblock %}

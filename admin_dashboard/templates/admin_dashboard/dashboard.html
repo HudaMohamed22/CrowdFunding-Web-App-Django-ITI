@@ -1,0 +1,97 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+
+{% block 'CSS_attachement' %}
+<link rel="stylesheet" href="{% static 'css/general_styles.css' %}">
+{% endblock %}
+
+{% block 'page-title' %}
+<title>NileFund - Admin Dashboard</title>
+{% endblock %}
+
+{% block 'hero-section-content' %}
+<!-- Start hero section -->
+<section class="d-flex align-items-center justify-content-center" id="hero-section" style="height: 250px; background-image: url('{% static 'homepage/images/header.png' %}'); background-position: center; background-size: cover">
+<div class="container">
+    <div class="d-flex align-items-center justify-content-center">
+        <h2 class="fw-light text-center mb-5"><span class="fw-bold">Admin</span> Dashboard</h2>
+    </div>
+</div>
+</section>
+{% endblock %}
+
+
+{% block 'body-content' %}
+<section id="admin_tasks" class="admin_tasks">
+    <div class="container">
+        <div class="row">
+            <h2 class="fw-light text-center mt-5"><span class="fw-bold">Categories</span> </h2>
+            <div class="col-md-4">
+                <div class="bg-main-color-subtle bg-main-color-subtle:hover rounded-3 p-4 my-3">
+                    <a href="{% url 'create_category' %}" class="link-underline link-underline-opacity-0">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-2x fa-circle-plus"></i>
+                            <div class="ps-4">
+                                <p class="category-paragraph fw-bold text-uppercase my-auto">Create Category</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="bg-secondary-color-subtle bg-secondary-color-subtle:hover rounded-3 p-4 my-3">
+                    <a href="{% url 'all_categories' %}" class="link-underline link-underline-opacity-0">
+                        <div class="d-flex align-items-center ">
+                            <i class="fa-solid fa-2x fa-pen-to-square"></i>
+                            <div class="ps-4">
+                                <p class="category-paragraph fw-bold text-uppercase my-auto">Edit / Delete Category</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h2 class="fw-light text-center mt-5"><span class="fw-bold">Projects</span></h2>
+            <div class="col-md-4">
+                <div class="bg-gray-color-subtle bg-gray-color-subtle:hover rounded-3 p-4 my-3">
+                    <a href="{% url 'all_projects' %}" class="link-underline link-underline-opacity-0">
+                        <div class="d-flex align-items-center ">
+                            <i class="fa-regular fa-2x fa-hand-pointer"></i>
+                            <div class="ps-4">
+                                <p class="category-paragraph fw-bold text-uppercase my-auto">Feature Projects</p>
+                        </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- <div id="modal" class="hidden">
+    <button class="close-modal">&times;</button>
+    <h3>Create a new category</h3>
+    <form method="post">
+        {% csrf_token %}
+        <span id="form-errors"></span>
+        <span id="success-message"></span>
+
+
+        {{ categoryForm }}
+        {{ categoryForm.name }}
+        <button type="submit" class="btn btn-special">Create</button>
+    </form>
+</div>
+<div class="overlay hidden"></div> -->
+
+{% endblock %}
+
+
+
+{% block 'JS_attachement' %}
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock %}

@@ -1,1 +1,8 @@
 env/
+*.pyc
+project/migrations/*
+!project/migrations/__init__.py
+users/migrations/*
+!users/migrations/__init__.py
+*/__pycache__/*
+.env

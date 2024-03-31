@@ -1,0 +1,58 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+
+{% block 'CSS_attachement' %}
+<link rel="stylesheet" href="{% static 'css/general_styles.css' %}">
+{% endblock %}
+
+{% block 'page-title' %}
+<title>NileFund - All Categories</title>
+{% endblock %}
+
+
+{% block 'hero-section-content' %}
+<!-- Start hero section -->
+<section class="d-flex align-items-center justify-content-center" id="hero-section" style="height: 250px; background-image: url('{% static 'homepage/images/header.png' %}'); background-position: center; background-size: cover">
+<div class="container">
+    <div class="d-flex align-items-center justify-content-center">
+        <h3>Categories List</h3>
+    </div>
+</div>
+</section>
+{% endblock %}
+
+{% block 'body-content' %}
+<div class="container my-5">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Show</th>
+                {% if user.is_superuser %}
+                <th>Edit</th>
+                <th>Delete</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category.name }}</td>
+                <td><a href="{% url 'category_projects' category.id %}" class="btn btn-secondary mx-2"><i class="fa-solid fa-eye"></i></a></td>
+                {% if user.is_superuser %}
+                <td><a href="{% url 'edit_category' category.id %}" class="btn btn-warning mx-2"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                <td><a href="{% url 'delete_category' category.id %}" class="btn btn-danger mx-2"><i class="fa-solid fa-trash"></i></a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
+
+{% block 'JS_attachement' %}
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,183 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: 'Nunito', sans-serif;
+
+}
+
+html {
+    font-size: 90%;
+    overflow-x: hidden;
+}
+
+
+.item {
+    padding: 10px 10px;
+}
+
+.proj-image-wrapper a {
+    align-self: center;
+}
+
+a {
+    color: white;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+a span {
+
+    font-size: 14px;
+    margin-left: -20px;
+
+}
+
+p {
+    font-size: 12px;
+    line-height: 15px;
+}
+
+
+.cell li {
+    font-weight: bold;
+    font-size: 12px;
+    list-style: none;
+    margin-left: 150px;
+    color: black;
+}
+
+.cell li:hover {
+    color: #eb9696;
+}
+
+.proj-list {
+    color: black;
+    background-color: #ffffff;
+    padding: 3em;
+}
+
+.proj-list .cell {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    padding: 1em;
+    position: relative; 
+    box-shadow: 0px 10px 5px #d69999; 
+    text-align: center;
+    overflow: hidden;
+    height: 400px;
+    width: 350px;
+    border-top: 3px solid #f0f0f0; 
+    margin-bottom: 40px;
+}
+
+.proj-list .cell::before {
+    content: "";
+    position: absolute;
+    top: -10px; 
+    left: 0;
+    right: 0;
+    height: 100px; 
+    background-color: rgb(245, 17, 17); 
+    border-radius: 10px 10px 0 0;
+    z-index: -1; 
+}
+.proj-info-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+
+}
+
+.proj-text {
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #999;
+}
+
+.cell .name {
+    font-size: 18px;
+    font-weight: bold;
+
+}
+
+.cell img {
+    align-self: center;
+    width: 50%;
+    border-radius: 5px;
+}
+
+.cell .text {
+    text-align: left;
+    margin-bottom: 0.5em;
+    font-size: 12px;
+}
+
+.cell .proj-desc {
+    text-align: left;
+    margin-bottom: 0.5em;
+    font-size: 12px;
+}
+
+.proj-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+}
+
+.proj-name {
+    font-size: 18px;
+    margin: 5px 0;
+    font-weight: 600;
+}
+
+.proj-goal {
+    color: #121212;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.cell .proj-image-wrapper {
+    margin-top: 10px;
+    height: 250px;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+}
+
+
+.cell .proj-image:hover {
+    opacity: 0.6;
+    transform: scale(1.1);
+}
+
+.proj-tags {
+    margin-top: 10px;
+}
+
+.tag {
+    display: inline-block;
+    background-color: #f2f2f2;
+    color: #333;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.proj-info-container {
+    padding: 10px;
+}
+
+.proj-info-container .btn-secondary {
+    width: 100%;
+    margin-top: 10px; 
+}
