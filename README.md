@@ -3,7 +3,7 @@
 <p id="description">Crowd Funding project aims to create a web platform for starting fundraising projects in Egypt where people can view donate and rate projects. The project is developed using the Python Django framework.</p>
 <h2>🚀 Demo</h2>
 <a href="https://youtu.be/0i51dEKlgeU">
-  <img src="https://img.youtube.com/vi/your-video-id/0.jpg" alt="Video thumbnail">
+  <img src="https://img.youtube.com/vi/0i51dEKlgeU/0.jpg" alt="Video thumbnail">
 </a>
 
 
