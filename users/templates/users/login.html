@@ -30,7 +30,9 @@
                 </div>
                 <div class="header-text mb-3">
                     {% for message in messages %}
-                    <p class="messages">{{message}}</p>
+                        {% if message.extra_tags == 'login' %}
+                            <p class="messages">{{message}}</p>
+                        {% endif %}
                     {% endfor %}
                 </div>
                 <form method="POST" action="">
