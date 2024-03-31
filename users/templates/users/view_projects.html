@@ -29,12 +29,13 @@
 
 {% block 'hero-section-content' %}
 <!-- Start hero section -->
-<section class="d-flex align-items-center justify-content-center" id="hero-section" style="height: 200px; background-image: url('{% static 'homepage/images/header.png' %}'); background-position: center; background-size: cover">
-<div class="container">
-    <div class="d-flex align-items-center justify-content-center">
-        <h2 class="fw-light text-center mb-5"><span class="fw-bold">My Projects</span> List</h2>
+<section class="d-flex align-items-center justify-content-center" id="hero-section"
+    style="height: 200px; background-image: url('{% static 'homepage/images/header.png' %}'); background-position: center; background-size: cover">
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-center">
+            <h2 class="fw-light text-center mb-5"><span class="fw-bold">My Projects</span> List</h2>
+        </div>
     </div>
-</div>
 </section>
 {% endblock %}
 {% block 'body-content' %}
@@ -44,7 +45,7 @@
         {% for project in user_projects %}
         <!-- Project cell -->
         <div class="cell">
-            
+
             <div class="my-1" style="height: 9rem;">
                 <img src="{{ project.image_url }}" class="d-block mx-auto w-auto h-100">
             </div>
@@ -52,22 +53,28 @@
                 <h3 class="proj-name">{{ project.title }}</h3>
                 <h3 class="proj-goal">Project Target: {{ project.total_target }} EGP</h3>
                 <div class="availability">
-                    {% if project.remaining_target <= 0 %} Fully Funded
+                    {% if project.remaining_target <= 0 %} Fully Funded 
                     {% else %} 
-                     Remaining: {{project.remaining_target }} EGP {% endif %} </div>
+                    Remaining: {{project.remaining_target}} EGP
+                    {% endif %} 
+                </div>
                         <!-- <div class="proj-desc"> Details: {{ project.details }}</div> -->
                         <span class="proj-text">Start Date: {{ project.start_date }}</span>
                         <span class="proj-text">End Date: {{ project.end_date }}</span>
                         <div class="proj-tags">
                             Tags:
-                            {% for tag in project.tag.all %}
+                            {% for tag in project.tag.all|slice:":4" %}
                             <span class="tag">{{ tag.name }}</span>
                             {% endfor %}
+                            {% if project.tag.count > 4 %}
+                            <!-- Add indicator if there are more than 4 tags -->
+                            <span>...</span>
+                            {% endif %}
                         </div>
-                        <a href="{% url 'project_details' id=project.id %}" class="btn btn-secondary d-block my-2">View details</a>
+                        <a href="{% url 'project_details' id=project.id %}" class="btn btn-secondary d-block my-2">View
+                            details</a>
                 </div>
             </div>
-
             {% endfor %}
         </div>
         {% else %}
@@ -75,7 +82,7 @@
             <div class="d-flex align-items-center justify-content-center">
                 <h2 class="fw-light text-center mb-5 text-warning">No Projects created yet!</h2>
             </div>
-        </div>   
+        </div>
         {% endif %}
 </section>
 {% endblock %}
