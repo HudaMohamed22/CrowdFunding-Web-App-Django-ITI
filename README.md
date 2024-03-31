@@ -62,8 +62,10 @@ Technologies used in the project:
 ### Windows:
 
 <p>1. Download or Clone the project</p>
-```git clone https://github.com/HudaMohamed22/CrowdFunding-Web-App-Django-ITI.git```
 
+```
+git clone https://github.com/HudaMohamed22/CrowdFunding-Web-App-Django-ITI.git
+```
 <p>2. Install python with V.3+ and MySQL database on your machine</p>
 
 <p>3. Install and activate VirtualEnvironment in the *window* terminal and write the following </p>
@@ -113,6 +115,7 @@ python3 manage.py runserver
 ### Linux:
 
 <p>1. Download or Clone the project</p>
+
 ```
 git clone https://github.com/HudaMohamed22/CrowdFunding-Web-App-Django-ITI.git
 ```
