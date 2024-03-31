@@ -6,7 +6,7 @@
   <img src="https://img.youtube.com/vi/your-video-id/0.jpg" alt="Video thumbnail">
 </a>
 
-[urle](urle)
+
 
 
 https://github.com/HudaMohamed22/CrowdFunding-Web-App-Django-ITI/assets/76265525/f631c400-8c20-40d9-bdbb-e33db9f17b3c
