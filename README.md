@@ -16,9 +16,8 @@
 <h2 id="demo">🚀 Demo</h2>
 
 ### User Demo
-<a href="https://youtu.be/0i51dEKlgeU">
-  <img src="https://img.youtube.com/vi/0i51dEKlgeU/0.jpg" alt="User Demo Video Thumbnail">
-</a>
+https://github.com/HudaMohamed22/CrowdFunding-Web-App-Django-ITI/assets/69374852/d2b57a20-0944-4c72-aa31-dcfc86fbce62
+
 
 ### Admin Demo
 https://github.com/HudaMohamed22/CrowdFunding-Web-App-Django-ITI/assets/76265525/f631c400-8c20-40d9-bdbb-e33db9f17b3c
