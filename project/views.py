@@ -84,64 +84,68 @@ def cancelProject(request, project_id):
         
 @login_required(login_url='login')
 def project_details(request, id):
-    project = get_object_or_404(Project, id=id)
-    tags = project.tag.all()
-    image_urls = project.get_image_urls()
-    comments= project.comments.all()
-    counter = list(range(len(image_urls)-1))
-    total_donation =  project.donations.aggregate(total=Sum('donation'))['total'] or 0
-    donation_count =  project.donations.aggregate(count=Count('id'))['count'] or 0
-    total_rate = project.rates.aggregate(total=Sum('rate'))['total'] or 0
-    rate_count = project.rates.aggregate(count=Count('rate'))['count'] or 0
-    days_left = (project.end_date - date.today()).days
-    user=get_object_or_404(CustomUser,pk=request.user.pk)
-    rate_by_user=0
-    target_threshold = project.total_target * 0.25
-    reportsNumber = project.Project_Reports.all().count() 
-    report_project_Form = ProjectReport_ModelForm()
-
-    # Find other projects with at least one common tag
-    similar_projects = Project.objects.filter(tag__in=tags).exclude(id=project.id).distinct()[:4]
-    
-    if total_rate is not None and rate_count is not None and rate_count != 0:
-        average_rating = total_rate / rate_count
-    else:
-        average_rating = 0 
-
-
-    if total_donation is not None and project.total_target is not None and project.total_target != 0:
-        donation_average = (total_donation * 100) / project.total_target
-    else:
-        donation_average = 0     
-    
     try:
-        user_rate = Rate.objects.get(user_id=user.pk).rate
-    except ObjectDoesNotExist:
-        user_rate = 0
+        project = get_object_or_404(Project, id=id)
+        tags = project.tag.all()
+        image_urls = project.get_image_urls()
+        comments= project.comments.all()
+        counter = list(range(len(image_urls)-1))
+        total_donation =  project.donations.aggregate(total=Sum('donation'))['total'] or 0
+        donation_count =  project.donations.aggregate(count=Count('id'))['count'] or 0
+        total_rate = project.rates.aggregate(total=Sum('rate'))['total'] or 0
+        rate_count = project.rates.aggregate(count=Count('rate'))['count'] or 0
+        days_left = (project.end_date - date.today()).days
+        user=get_object_or_404(CustomUser,pk=request.user.pk)
+        rate_by_user=0
+        target_threshold = project.total_target * 0.25
+        reportsNumber = project.Project_Reports.all().count() 
+        report_project_Form = ProjectReport_ModelForm()
+
+        # Find other projects with at least one common tag
+        similar_projects = Project.objects.filter(tag__in=tags).exclude(id=project.id).distinct()[:4]
+        
+        if total_rate is not None and rate_count is not None and rate_count != 0:
+            average_rating = total_rate / rate_count
+        else:
+            average_rating = 0
+        
+        project.rate = average_rating
+        project.save()
 
 
+        if total_donation is not None and project.total_target is not None and project.total_target != 0:
+            donation_average = (total_donation * 100) / project.total_target
+        else:
+            donation_average = 0     
+        
+        try:
+            user_rate = Rate.objects.get(user_id=user.pk, project_id=id).rate
+        except ObjectDoesNotExist:
+            user_rate = 0
+            
+        context = {
+            'project': project,
+            'tags': tags,
+            'image_urls': image_urls,
+            'counter': counter,
+            "rate": user_rate,
+            "comments": comments,
+            "donation_count":donation_count,
+            "total_donation":  total_donation,    
+            "donation_average":donation_average,
+            "average_rating":average_rating,
+            "days_left":days_left,
+            "user":user,
+            'target_threshold': target_threshold,
+            "reportsNumber":reportsNumber,
+            "report_project_Form":report_project_Form,
+            "rate_by_user": rate_by_user,
+            "similar_projects":similar_projects
+        }
+        return render(request, "project/project_details.html", context)
+    except Exception as e:
+        return render(request, "404.html")
 
-    context = {
-        'project': project,
-        'tags': tags,
-        'image_urls': image_urls,
-        'counter': counter,
-        "rate": user_rate,
-        "comments": comments,
-        "donation_count":donation_count,
-        "total_donation":  total_donation,    
-        "donation_average":donation_average,
-        "average_rating":average_rating,
-        "days_left":days_left,
-        "user":user,
-        'target_threshold': target_threshold,
-        "reportsNumber":reportsNumber,
-        "report_project_Form":report_project_Form,
-        "rate_by_user": rate_by_user,
-        "similar_projects":similar_projects
-    }
-
-    return render(request, "project/project_details.html", context)
 
 #mehtagen net2aked el far2 benhom 
 @login_required(login_url='login')
@@ -173,19 +177,20 @@ def add_donations(request, project_id):
         error_message = None 
         if request.method == "POST":
                 donationAmount = request.POST.get('donation', '')
-                if donationAmount.strip():
-                    donationAmount = float(donationAmount)
-                    if donationAmount + project.current_donation > project.total_target:
-                        error_message ="Donation amount cannot exceed the total target."
-                    else:    
-                        Donation.objects.create(
-                            donation=donationAmount,
-                            project=project,
-                            user=user
-                        )
-                        project.current_donation+=donationAmount
-                        project.save()
-                        return redirect('project_details', project_id)
+                if donationAmount:
+                    if donationAmount.strip():
+                        donationAmount = float(donationAmount)
+                        if donationAmount + project.current_donation > project.total_target:
+                            error_message ="Donation amount cannot exceed the total target."
+                        else:    
+                            Donation.objects.create(
+                                donation=donationAmount,
+                                project=project,
+                                user=user
+                            )
+                            project.current_donation+=donationAmount
+                            project.save()
+                return redirect('project_details', project_id)
         return render(request, "project/project_details.html", context={"user": user, "project": project,"error_message": error_message})
 
 

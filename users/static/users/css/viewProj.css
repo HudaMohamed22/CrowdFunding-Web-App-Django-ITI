@@ -29,7 +29,7 @@ a {
     text-decoration: none;
 }
 
-a pan {
+a span {
 
     font-size: 14px;
     margin-left: -20px;
@@ -40,6 +40,7 @@ p {
     font-size: 12px;
     line-height: 15px;
 }
+
 
 .cell li {
     font-weight: bold;
@@ -70,6 +71,7 @@ p {
     text-align: center;
     overflow: hidden;
     height: 400px;
+    width: 156.6px;
     border-top: 3px solid #f0f0f0; 
 }
 
@@ -85,7 +87,6 @@ p {
     z-index: -1; 
 }
 .proj-info-container {
-
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
@@ -125,10 +126,9 @@ p {
 
 .proj-grid-container {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-column-gap: 20px;
     grid-row-gap: 20px;
-
 }
 
 .proj-name {

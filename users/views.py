@@ -94,7 +94,7 @@ def logout_user(request):
 
 def view_profile(request):
     try:
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and not request.user.is_superuser:
             user = request.user
             context = {
                 'user': user

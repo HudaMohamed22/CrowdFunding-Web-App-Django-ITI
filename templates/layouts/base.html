@@ -34,24 +34,27 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'all_projects' %}">Projects</a>
+                            <a class="nav-link" aria-current="page" href="{% url 'home.landing' %}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Tags</a>
+                            <a class="nav-link" aria-current="page" href="{% url 'all_projects' %}">Projects</a>
                         </li>
                     </ul>
                     {% if user.is_authenticated %}
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <a class="btn btn-outline-special ms-auto" href="{% url 'project.create_project' %}">Create a
-                            Project</a>
+                        {% if not user.is_superuser %}
+                        <a class="btn btn-outline-special ms-auto" href="{% url 'project.create_project' %}">Create a Project</a>
+                        {% endif %}
                         {% if user.is_superuser %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'admin_dashboard' %}">Dashboard</a>
                         </li>
                         {% endif %}
+                        {% if not user.is_superuser %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'profile' %}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
                         </li>
+                        {% endif %}
                         
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'logout' %}">Logout</a>

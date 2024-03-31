@@ -4,7 +4,23 @@
 {% block 'CSS_attachement' %}
 <link rel="stylesheet" href="{% static 'users/css/viewProj.css' %}">
 <link rel="stylesheet" href="{% static 'css/general_styles.css' %}">
-<link rel="stylesheet" href="{% static 'users/css/viewProj.css' %}">
+
+<!-- <style>
+    .cell {
+        position: relative;
+    }
+
+    .cell::after {
+        content: "link";
+        position: absolute;
+        top: 5px;
+        border-radius: 10px;
+        left: 5px;
+        background-color: orangered;
+        width: 50px;
+        height: 30px;
+    }
+</style> -->
 {% endblock %}
 
 {% block 'page-title' %}
@@ -23,24 +39,22 @@
 {% endblock %}
 {% block 'body-content' %}
 <section class="proj-list">
-    {% if user_donations %}
+    {% if user_projects %}
     <div class="proj-grid-container">
         {% for project in user_projects %}
         <!-- Project cell -->
         <div class="cell">
-            <a href="{% url 'project_details' id=project.id %}">
-                <li>View details</li>
-            </a>
-            <div class="proj-image-wrapper">
-                <img src="{{ project.image_url }}" class="product-image">
+            
+            <div class="my-1" style="height: 9rem;">
+                <img src="{{ project.image_url }}" class="d-block mx-auto w-auto h-100">
             </div>
             <div class="proj-info-container">
                 <h3 class="proj-name">{{ project.title }}</h3>
-                <h3 class="proj-goal">Project Target: EGP {{ project.total_target }}.00</h3>
+                <h3 class="proj-goal">Project Target: {{ project.total_target }} EGP</h3>
                 <div class="availability">
                     {% if project.remaining_target <= 0 %} Fully Funded
                     {% else %} 
-                     Remaining: EGP {{project.remaining_target }}.00 {% endif %} </div>
+                     Remaining: {{project.remaining_target }} EGP {% endif %} </div>
                         <!-- <div class="proj-desc"> Details: {{ project.details }}</div> -->
                         <span class="proj-text">Start Date: {{ project.start_date }}</span>
                         <span class="proj-text">End Date: {{ project.end_date }}</span>
@@ -50,8 +64,10 @@
                             <span class="tag">{{ tag.name }}</span>
                             {% endfor %}
                         </div>
+                        <a href="{% url 'project_details' id=project.id %}" class="btn btn-secondary d-block my-2">View details</a>
                 </div>
             </div>
+
             {% endfor %}
         </div>
         {% else %}

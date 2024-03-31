@@ -90,7 +90,7 @@
                                     <h5 class="">{{project.title}}</h5>
                                     <p class="my-1 w-75">{{project.details}}</p>
                                     <span class="d-flex align-items-center">
-                                        <p class="fw-semibold m-0">Rating</p>
+                                        <p class="fw-semibold m-0 me-1">Rating</p>
                                         {% for star in "*****" %}
                                             {% if forloop.counter <= project.rate %}
                                                 <i class="fas fa-star text-warning"></i>
@@ -101,7 +101,9 @@
                                     </span>
                                 </div>
                                 <div class="col-md-2 mb-3 align-self-end">
-                                    <a href="#"class="btn btn-special rounded-5 px-4 py-2">Fund</a>
+                                    {% if not user.is_superuser %}
+                                    <a href="{% url 'project_details' id=project.id %}"class="btn btn-special rounded-5 px-4 py-2">Donate</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -155,9 +157,11 @@
                                     {% endif %}
                                 {% endfor %}
                             </span>
-                            
                         </div>
                     </div>
+                    {% if not user.is_superuser %}
+                    <a href="{% url 'project_details' id=project.id %}" class="btn btn-secondary d-block my-2">View details</a>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
@@ -194,6 +198,9 @@
                             </span>
                         </div>
                     </div>
+                    {% if not user.is_superuser %}
+                    <a href="{% url 'project_details' id=project.id %}" class="btn btn-secondary d-block my-2">View details</a>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
@@ -257,154 +264,6 @@
     </div>
 </section>
 
-<!-- Featured projects section -->
-<!-- <section id="featured" class="padding-medium">
-    <div class="container py-4">
-    <h2 class="fw-light text-center mb-5"><span class="fw-bold">Featured</span> projects</h2>
-
-    <div class="row">
-        <div class="col-sm-6 col-lg-4 col-xl-3 mb-5">
-        <div class="card rounded-4 border-0 shadow-sm p-3 position-relative">
-            <img src="https://placehold.co/200" class="img-fluid rounded-3" alt="image">
-            <div class="card-body p-0">          
-            <div class="card-text">
-                <div class="d-flex justify-content-between my-3">
-                <h5 class="text-black-50 fw-bold text-uppercase m-0">Project Name</h5>
-                </div>
-            
-                <p class="course-title py-2 m-0">Project description</p>
-                <span class="rating d-flex align-items-center mt-3">
-                <p class="text-muted fw-semibold m-0 me-2">Rating</p>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                </span>
-            </div>
-            </div>
-        </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-4 col-xl-3 mb-5">
-        <div class="card rounded-4 border-0 shadow-sm p-3 position-relative">
-            <img src="https://placehold.co/200" class="img-fluid rounded-3" alt="image">
-            <div class="card-body p-0">          
-            <div class="card-text">
-                <div class="d-flex justify-content-between my-3">
-                <h5 class="text-black-50 fw-bold text-uppercase m-0">Project Name</h5>
-                </div>
-            
-                <p class="course-title py-2 m-0">Project description</p>
-                <span class="rating d-flex align-items-center mt-3">
-                <p class="text-muted fw-semibold m-0 me-2">Rating</p>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                </span>
-            </div>
-            </div>
-        </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-4 col-xl-3 mb-5">
-        <div class="card rounded-4 border-0 shadow-sm p-3 position-relative">
-            <img src="https://placehold.co/200" class="img-fluid rounded-3" alt="image">
-            <div class="card-body p-0">          
-            <div class="card-text">
-                <div class="d-flex justify-content-between my-3">
-                <h5 class="text-black-50 fw-bold text-uppercase m-0">Project Name</h5>
-                </div>
-            
-                <p class="course-title py-2 m-0">Project description</p>
-                <span class="rating d-flex align-items-center mt-3">
-                <p class="text-muted fw-semibold m-0 me-2">Rating</p>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                </span>
-            </div>
-            </div>
-        </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-4 col-xl-3 mb-5">
-        <div class="card rounded-4 border-0 shadow-sm p-3 position-relative">
-            <img src="https://placehold.co/200" class="img-fluid rounded-3" alt="image">
-            <div class="card-body p-0">          
-            <div class="card-text">
-                <div class="d-flex justify-content-between my-3">
-                <h5 class="text-black-50 fw-bold text-uppercase m-0">Project Name</h5>
-                </div>
-            
-                <p class="course-title py-2 m-0">Project description</p>
-                <span class="rating d-flex align-items-center mt-3">
-                <p class="text-muted fw-semibold m-0 me-2">Rating</p>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                </span>
-            </div>
-            </div>
-        </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-4 col-xl-3 mb-5">
-        <div class="card rounded-4 border-0 shadow-sm p-3 position-relative">
-            <img src="https://placehold.co/200" class="img-fluid rounded-3" alt="image">
-            <div class="card-body p-0">          
-            <div class="card-text">
-                <div class="d-flex justify-content-between my-3">
-                <h5 class="text-black-50 fw-bold text-uppercase m-0">Project Name</h5>
-                </div>
-            
-                <p class="course-title py-2 m-0">Project description</p>
-                <span class="rating d-flex align-items-center mt-3">
-                <p class="text-muted fw-semibold m-0 me-2">Rating</p>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                </span>
-            </div>
-            </div>
-        </div>
-        </div>
-
-        <div class="col-sm-6 col-lg-4 col-xl-3 mb-5">
-        <div class="card rounded-4 border-0 shadow-sm p-3 position-relative">
-            <img src="https://placehold.co/200" class="img-fluid rounded-3" alt="image">
-            <div class="card-body p-0">          
-            <div class="card-text">
-                <div class="d-flex justify-content-between my-3">
-                <h5 class="text-black-50 fw-bold text-uppercase m-0">Project Name</h5>
-                </div>
-            
-                <p class="course-title py-2 m-0">Project description</p>
-                <span class="rating d-flex align-items-center mt-3">
-                <p class="text-muted fw-semibold m-0 me-2">Rating</p>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                </span>
-            </div>
-            </div>
-        </div>
-        </div>
-
-
-    </div>
-    </div>
-</section> -->
 {% endblock %}
 
 

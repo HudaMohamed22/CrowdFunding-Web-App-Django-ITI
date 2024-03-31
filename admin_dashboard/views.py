@@ -22,19 +22,9 @@ def create_new_category(request):
         form = Category_ModelForm(request.POST)
         if form.is_valid():
             form.save()
-            # return JsonResponse({'success': True}) 
             return render(request, 'admin_dashboard/dashboard.html')
-        # else:
-        #     errors = form.errors.as_json()
-        #     return JsonResponse({'success': False, 'errors': errors})
-    # return render(request, 'admin_dashboard/dashboard.html', context={"categoryForm": form})
     return render(request, 'admin_dashboard/create_category.html', context={"categoryForm": form})
 
-
-
-def show_categories(request):
-    categories = Category.get_all_categories()
-    return render(request, 'admin_dashboard/all_categories.html', {'categories': categories})
 
 @login_required(login_url='login')
 @admin_required
@@ -57,18 +47,6 @@ def delete_specific_category(request, category_id):
     url = reverse('all_categories')
     return redirect(url)
 
-@login_required(login_url='login')
-def category_projects(request, category_id):
-    selected_category = Category.get_category_by_id(category_id)
-    if not request.user.is_superuser:
-        category_projects = Project.objects.filter(category_id=category_id, owner_id=request.user.id)
-    else:
-        category_projects = Project.objects.filter(category_id=category_id)
-    return render(request, 'admin_dashboard/category_projects.html', {'category_projects': category_projects, 'selected_category':selected_category})
-
-def show_projects(request):
-    projects = Project.objects.all()
-    return render(request, "admin_dashboard/all_Projects.html", {'projects': projects})
 
 @login_required(login_url='login')
 @admin_required

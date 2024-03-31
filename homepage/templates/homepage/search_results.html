@@ -52,10 +52,13 @@
                             <img src="{{ searchResult.image_url }}" class="d-block mx-auto" width="120px" height="110px" alt="" />
                         </div>
                         <div class="card-body px-4">
-                            <div class="mb-2">
+                            <div class="mb-2 d-flex justify-content-between align-items-center">
                                 <h6 class="card-title d-inline-block">{{searchResult.title}}</h6>
+                                {% if not user.is_superuser %}
+                                <a href="{% url 'project_details' id=searchResult.id %}" class="btn btn-secondary">View details</a>
+                                {% endif %}
                             </div>
-                            <p class="mb-3"><span class="fw-bold">Total Target:</span> {{searchResult.total_target}}</p>
+                            <p class="mb-3"><span class="fw-bold">Total Target:</span> {{searchResult.total_target}} EGP</p>
                             <p class="mb-1"><span class="fw-bold">Start Date:</span> {{searchResult.start_date}}</p>
                             <p><span class="fw-bold">End Date:</span> {{searchResult.end_date}}</p>
                         </div>
