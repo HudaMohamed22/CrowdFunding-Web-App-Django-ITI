@@ -1,15 +1,16 @@
 <h1 align="center" id="title">Crowd Funding Web App - ITI</h1>
 
 <p id="description">Crowd Funding project aims to create a web platform for starting fundraising projects in Egypt where people can view donate and rate projects. The project is developed using the Python Django framework.</p>
-<h2>🚀 Demo</h2>
-## User demo
+<h2>🚀 Demos </h2>
+
+## User-demo
 <a href="https://youtu.be/0i51dEKlgeU">
   <img src="https://img.youtube.com/vi/0i51dEKlgeU/0.jpg" alt="Video thumbnail">
 </a>
 
 
 
-## Admin demo
+## Admin-demo
 https://github.com/HudaMohamed22/CrowdFunding-Web-App-Django-ITI/assets/76265525/f631c400-8c20-40d9-bdbb-e33db9f17b3c
 
 
