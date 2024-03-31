@@ -86,10 +86,9 @@ def login_user(request):
 
         return render(request,'users/login.html')
 
-
 def logout_user(request):
     logout(request)
-    url = reverse('login')
+    url = reverse('home.landing')
     return redirect(url)
 
 def view_profile(request):

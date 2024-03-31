@@ -22,10 +22,11 @@ from django.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
 from admin_dashboard.views import page_403
-
+from homepage.views import landing
 
 
 urlpatterns = [
+    path('', landing, name="home.landing"),
     path('admin/', admin.site.urls),
     path('project/', include('project.urls')),
     path('home/', include('homepage.urls')),
