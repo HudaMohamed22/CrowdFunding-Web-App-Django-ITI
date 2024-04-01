@@ -63,10 +63,7 @@ def show_categories(request):
 def category_projects(request, category_id):
     try:
         selected_category = Category.get_category_by_id(category_id)
-        if not request.user.is_superuser:
-            category_projects = Project.objects.filter(category_id=category_id, owner_id=request.user.id)
-        else:
-            category_projects = Project.objects.filter(category_id=category_id)
+        category_projects = Project.objects.filter(category_id=category_id)
         return render(request, 'homepage/category_projects.html', {'category_projects': category_projects, 'selected_category':selected_category})
     except Exception as e:
         return render(request,'404.html')

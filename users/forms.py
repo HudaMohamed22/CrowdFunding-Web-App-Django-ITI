@@ -39,12 +39,6 @@ class RegisterModelForm(UserCreationForm):
         
         return mobile_phone
 
-    # def clean_profile_picture(self):
-    #     profile_picture = self.cleaned_data['profile_picture']
-    #     if profile_picture:
-    #         if not profile_picture.endswith(('.jpg', '.jpeg', '.png')):
-    #             raise ValidationError("Profile picture must be in JPG, JPEG, or PNG format.")
-    #     return profile_picture
     
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name')

@@ -249,7 +249,7 @@ def rate_project(request, id):
             rate = request.POST.get('rate', 'empty')
             if rate.isnumeric():
                  customuser=get_object_or_404(CustomUser,pk=request.user.pk)
-                 check_if_rating_exists(request,project, customuser, rate)
+                 check_if_rating_exists(project, customuser, rate)
 
         return redirect('project_details', id)
     except Http404:
